@@ -22,7 +22,7 @@
       <!-- show header with logo, bg and fg -->
       <div nz-col [nzSpan]="12">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'showHeader'" [nzSm]="9">Show Header</nz-form-label>
+          <nz-form-label [nzFor]="'showHeader'" [nzSm]="9">Intestazione</nz-form-label>
           <nz-form-control [nzSm]="15">
               <nz-switch [formControlName]="'showHeader'"></nz-switch>
           </nz-form-control>
@@ -30,7 +30,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'background'" [nzSm]="16">Background</nz-form-label>
+          <nz-form-label [nzFor]="'background'" [nzSm]="16">Sfondo</nz-form-label>
           <nz-form-control [nzSm]="8">
               <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -45,7 +45,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'foregroud'" [nzSm]="16">Foreground</nz-form-label>
+          <nz-form-label [nzFor]="'foregroud'" [nzSm]="16">Testo</nz-form-label>
           <nz-form-control [nzSm]="8">
             <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -62,9 +62,9 @@
       <!-- Home -->
       <div nz-col [nzSpan]="12">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'homeName'" [nzSm]="9">Home Name</nz-form-label>
+          <nz-form-label [nzFor]="'homeName'" [nzSm]="9">Nome Casa</nz-form-label>
           <nz-form-control [nzSm]="15">
-            <input nz-input placeholder="Home" [formControlName]="'homeName'"
+            <input nz-input placeholder="Casa" [formControlName]="'homeName'"
             [style.background]="formGroup.get('homeBg').value"
             [style.color]="formGroup.get('homeFg').value"
             />
@@ -73,7 +73,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'homeBg'" [nzSm]="16">Home BG</nz-form-label>
+          <nz-form-label [nzFor]="'homeBg'" [nzSm]="16">Sfondo Casa</nz-form-label>
           <nz-form-control [nzSm]="8">
               <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -88,7 +88,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'homeFg'" [nzSm]="16">Home FG</nz-form-label>
+          <nz-form-label [nzFor]="'homeFg'" [nzSm]="16">Testo Casa</nz-form-label>
           <nz-form-control [nzSm]="8">
             <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -105,9 +105,9 @@
       <!-- Away -->
       <div nz-col [nzSpan]="12">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'awayName'" [nzSm]="9">Away Name</nz-form-label>
+          <nz-form-label [nzFor]="'awayName'" [nzSm]="9">Nome Ospiti</nz-form-label>
           <nz-form-control [nzSm]="15">
-            <input nz-input placeholder="Away" [formControlName]="'awayName'"
+            <input nz-input placeholder="Ospiti" [formControlName]="'awayName'"
             [style.background]="formGroup.get('awayBg').value"
             [style.color]="formGroup.get('awayFg').value"
             />
@@ -116,7 +116,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'awayBg'" [nzSm]="16">Away BG</nz-form-label>
+          <nz-form-label [nzFor]="'awayBg'" [nzSm]="16">Sfondo Ospiti</nz-form-label>
           <nz-form-control [nzSm]="8">
               <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -131,7 +131,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'awayFg'" [nzSm]="16">Away FG</nz-form-label>
+          <nz-form-label [nzFor]="'awayFg'" [nzSm]="16">Testo Ospiti</nz-form-label>
           <nz-form-control [nzSm]="8">
             <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -148,7 +148,7 @@
       <!-- Set -->
       <div nz-col [nzSpan]="12">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'setName'" [nzSm]="9">Set Label</nz-form-label>
+          <nz-form-label [nzFor]="'setName'" [nzSm]="9">Etichetta Set</nz-form-label>
           <nz-form-control [nzSm]="15">
             <input nz-input placeholder="Set" [formControlName]="'setName'"
             [style.background]="formGroup.get('setBg').value"
@@ -159,7 +159,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'setBg'" [nzSm]="16">Set BG</nz-form-label>
+          <nz-form-label [nzFor]="'setBg'" [nzSm]="16">Sfondo Set</nz-form-label>
           <nz-form-control [nzSm]="8">
               <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -174,7 +174,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'setFg'" [nzSm]="16">Set FG</nz-form-label>
+          <nz-form-label [nzFor]="'setFg'" [nzSm]="16">Testo Set</nz-form-label>
           <nz-form-control [nzSm]="8">
             <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -191,7 +191,7 @@
       <!-- Point -->
       <div nz-col [nzOffset]="12" [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'pointBg'" [nzSm]="16">Point BG</nz-form-label>
+          <nz-form-label [nzFor]="'pointBg'" [nzSm]="16">Sfondo Punti</nz-form-label>
           <nz-form-control [nzSm]="8">
               <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -206,7 +206,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'pointFg'" [nzSm]="16">Point FG</nz-form-label>
+          <nz-form-label [nzFor]="'pointFg'" [nzSm]="16">Testo Punti</nz-form-label>
           <nz-form-control [nzSm]="8">
             <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -223,7 +223,7 @@
       <!-- Timeout -->
       <div nz-col [nzSpan]="12">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'timeoutName'" [nzSm]="9">Timeout Label</nz-form-label>
+          <nz-form-label [nzFor]="'timeoutName'" [nzSm]="9">Etichetta Timeout</nz-form-label>
           <nz-form-control [nzSm]="15">
             <input nz-input placeholder="Timeout" [formControlName]="'timeoutName'"
             [style.background]="formGroup.get('bg').value"
@@ -234,7 +234,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nzFlex>
-          <nz-form-label [nzFor]="'timeoutBg'" [nzSm]="16">Timeout BG</nz-form-label>
+          <nz-form-label [nzFor]="'timeoutBg'" [nzSm]="16">Sfondo Timeout</nz-form-label>
           <nz-form-control [nzSm]="8">
               <input nz-input class="colorPicker" readonly="true"
               [cpCancelButton]="true"
@@ -253,7 +253,7 @@
       <!-- Video Check -->
       <div nz-col [nzSpan]="12">
           <nz-form-item nzFlex>
-            <nz-form-label [nzFor]="'videoCheckName'" [nzSm]="9">Video Check Label</nz-form-label>
+            <nz-form-label [nzFor]="'videoCheckName'" [nzSm]="9">Etichetta Video Check</nz-form-label>
             <nz-form-control [nzSm]="15">
               <input nz-input placeholder="Video Check" [formControlName]="'videoCheckName'"
               [style.background]="formGroup.get('bg').value"
@@ -264,7 +264,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item nzFlex>
-            <nz-form-label [nzFor]="'videoCheckBg'" [nzSm]="16">Video Check BG</nz-form-label>
+            <nz-form-label [nzFor]="'videoCheckBg'" [nzSm]="16">Sfondo Video Check</nz-form-label>
             <nz-form-control [nzSm]="8">
                 <input nz-input class="colorPicker" readonly="true"
                 [cpCancelButton]="true"
@@ -287,21 +287,21 @@
   <button nz-button nzType="primary"
   [disabled]="disabled"
   (click)="cancelPrefs()">
-    Cancel
+    Annulla
   </button>
   <button nz-button nzType="primary" ngbAutofocus
   [disabled]="disabled"
   (click)="updatePrefs()">
-    {{newMatch? 'New Match' : 'Save'}}
+    {{newMatch? 'Nuova Partita' : 'Salva'}}
   </button>
   <button nz-button nzType="primary" ngbAutofocus
   [disabled]="disabled"
   (click)="previewPrefs()">
-    Preview
+    Anteprima
   </button>
   <button nz-button nzType="primary" ngbAutofocus
   [disabled]="disabled"
   (click)="loadDefaultPrefs()">
-    Load Defaults
+    Predefiniti
   </button>
 </div>

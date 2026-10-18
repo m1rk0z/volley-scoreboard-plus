@@ -17,7 +17,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
 
   @Input() formData: ScoreboardPrefs;
   @Input() newMatch = false;
-  @Input() title = 'Preferences';
+  @Input() title = 'Preferenze';
 
   formGroup: FormGroup;
 
@@ -246,13 +246,12 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
     this.disabled = true;
 
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will Reset current preferences defauls.\nYou won\'t be able to revert this!',
+      title: 'Sei sicuro?',
+      text: 'Le preferenze verranno ripristinate ai valori predefiniti.\nQuesta azione non può essere annullata!',
       type: 'warning',
       showCancelButton: true,
-//      confirmButtonColor: '#3085d6',
-//      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Reset Preferences!'
+      confirmButtonText: 'Sì, Ripristina Preferenze!',
+      cancelButtonText: 'Annulla'
     }).then((result) => {
       if (result.value) {
         this.scoreboardService.resetPrefs().subscribe(

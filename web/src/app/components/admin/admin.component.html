@@ -3,23 +3,23 @@
       <nz-button-group>
         <button type="button" nz-button nzType="primary"
           (click)="newMatch()">
-            NEW MATCH {{ keyboardShortcuts.newMatch? ' ( '+ keyboardShortcuts.newMatch +' ) ' : ''}}
+            NUOVA PARTITA {{ keyboardShortcuts.newMatch? ' ( '+ keyboardShortcuts.newMatch +' ) ' : ''}}
         </button>
         <button type="button" nz-button nzType="primary"
           (click)="newSet()">
-          NEW SET {{ keyboardShortcuts.newSet? ' ( '+ keyboardShortcuts.newSet +' ) ' : ''}}
+          NUOVO SET {{ keyboardShortcuts.newSet? ' ( '+ keyboardShortcuts.newSet +' ) ' : ''}}
         </button>
         <button type="button" nz-button nzType="primary"
           (click)="endMatch()">
-          END MATCH {{ keyboardShortcuts.endMatch? ' ( '+ keyboardShortcuts.endMatch +' ) ' : ''}}
+          FINE PARTITA {{ keyboardShortcuts.endMatch? ' ( '+ keyboardShortcuts.endMatch +' ) ' : ''}}
         </button>
         <button type="button" nz-button nzType="primary"
               (click)="openPreferences()">
           <i class="fa fa-cog"></i>
-          PREFERENCES
+          PREFERENZE
         </button>
       </nz-button-group>
-      <span style="color: #ffffff; padding: 0px 15px 0px 25px;">Hide Buttons</span><nz-switch [(ngModel)]="hideControls"></nz-switch>
+      <span style="color: #ffffff; padding: 0px 15px 0px 25px;">Nascondi Tasti</span><nz-switch [(ngModel)]="hideControls"></nz-switch>
   </nz-header>
   <nz-content>
     <div *ngIf="!loading" class="inner-content" [style.padding-top]="!hideControls ? '10px' : null">

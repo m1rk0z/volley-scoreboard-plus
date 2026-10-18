@@ -12,14 +12,14 @@
           </div>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your username!">
+            <nz-form-control nzErrorTip="Inserisci il nome utente!">
               <nz-input-group nzPrefixIcon="user">
-                <input type="text" nz-input formControlName="username" placeholder="Username" />
+                <input type="text" nz-input formControlName="username" placeholder="Nome Utente" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your Password!">
+            <nz-form-control nzErrorTip="Inserisci la password!">
               <nz-input-group nzPrefixIcon="lock">
                 <input type="password" nz-input formControlName="password" placeholder="Password" />
               </nz-input-group>
@@ -27,7 +27,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-control>
-              <button nz-button [disabled]="waitingLoginRes" class="login-form-button" [nzType]="'primary'">Log in</button>
+              <button nz-button [disabled]="waitingLoginRes" class="login-form-button" [nzType]="'primary'">Accedi</button>
             </nz-form-control>
           </nz-form-item>
           <p style="margin: 0px;">Volley Scoreboard Plus v{{getVertion()}}<br>

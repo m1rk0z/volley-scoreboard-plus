@@ -11,25 +11,25 @@ export class AlertService {
   showError(error: any) {
     if (error) {
       if (typeof error === 'string') {
-        Swal.fire('Oops...', error, 'error');
+        Swal.fire('Errore', error, 'error');
         return;
       }
       if (error instanceof HttpErrorResponse) {
         if (error.error instanceof ErrorEvent) {
-          Swal.fire('Oops...', error.error.message, 'error');
+          Swal.fire('Errore', error.error.message, 'error');
           return;
         }
         if (error.error && error.error.error && error.error.error.message) {
-          Swal.fire('Oops...', error.error.error.message, 'error');
+          Swal.fire('Errore', error.error.error.message, 'error');
           return;
         }
         // server-side error
-        Swal.fire('Oops...', `${error.statusText} (${error.status})`, 'error');
+        Swal.fire('Errore', `${error.statusText} (${error.status})`, 'error');
         return;
       }
     }
 
-    Swal.fire('Oops...', 'Something bad happened; please try again later.', 'error');
+    Swal.fire('Errore', 'Si è verificato un errore imprevisto. Riprova più tardi.', 'error');
   }
 
 }

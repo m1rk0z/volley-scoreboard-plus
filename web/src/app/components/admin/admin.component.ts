@@ -266,6 +266,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     });
     ngbModalRef.componentInstance.formData = JSON.parse(JSON.stringify(this.prefs));
     ngbModalRef.componentInstance.newMatch = true;
+    ngbModalRef.componentInstance.title = 'Nuova Partita';
     ngbModalRef.result.then((ignored: any) => {
       this.disabled = false;
     }, (ignored: any) => {
@@ -277,12 +278,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
 
     Swal.fire({
-      title: 'Are you sure to start New Set?',
+      title: 'Sei sicuro di iniziare un Nuovo Set?',
       type: 'question',
       showCancelButton: true,
-//      confirmButtonColor: '#3085d6',
-//      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Start New Set!'
+      confirmButtonText: 'Sì, Inizia Nuovo Set!',
+      cancelButtonText: 'Annulla'
     }).then((result) => {
       if (result.value) {
         this.disabled = true;
@@ -303,12 +303,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
 
     Swal.fire({
-      title: 'Are you sure to End Match?',
+      title: 'Sei sicuro di Terminare la Partita?',
       type: 'question',
       showCancelButton: true,
-//      confirmButtonColor: '#3085d6',
-//      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes and show the winner!'
+      confirmButtonText: 'Sì, mostra il vincitore!',
+      cancelButtonText: 'Annulla'
     }).then((result) => {
       if (result.value) {
         this.disabled = true;
