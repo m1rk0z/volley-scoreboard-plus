@@ -4,8 +4,8 @@ from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-OUTPUT_WORKSPACE = r"c:\Users\mcominardi\Desktop\Progetti\Rasberry-pi 5\Guida-Volley-Scoreboard-Plus.pdf"
-OUTPUT_DESKTOP = r"c:\Users\mcominardi\Desktop\Guida-Volley-Scoreboard-Plus.pdf"
+OUTPUT_WORKSPACE = r"c:\Users\mcominardi\Desktop\Progetti\Rasberry-pi 5\Guida-Volley-Scoreboard.pdf"
+OUTPUT_DESKTOP = r"c:\Users\mcominardi\Desktop\Guida-Volley-Scoreboard.pdf"
 
 html_content = """<!DOCTYPE html>
 <html lang="it">
@@ -219,10 +219,36 @@ html_content = """<!DOCTYPE html>
     </div>
   </div>
 
-  <!-- SEZIONE 1: ACCESSO RAPIDO -->
+  <!-- SEZIONE 1: RETE WI-FI E ACCESSO RAPIDO -->
   <div class="card highlight">
-    <h2>1. Accesso Rapido dal Telefono / Tablet di Controllo</h2>
-    <p>Collegare il dispositivo (smartphone, tablet o portatile) alla rete Wi-Fi del palazzetto ed aprire Google Chrome o Safari:</p>
+    <h2>1. Rete Wi-Fi FRITZ!Box & Accesso Smartphone / Tablet</h2>
+    <p>Connettere lo smartphone o il tablet alla rete Wi-Fi del palazzetto per gestire il segnapunti:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Rete</th>
+          <th>Nome Wi-Fi (SSID)</th>
+          <th>Password</th>
+          <th>Gateway / Router</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>FRITZ!Box (Principale)</strong></td>
+          <td><strong style="color:#0055b8;">***RIMOSSO***</strong></td>
+          <td><code>***RIMOSSO***</code></td>
+          <td><code>x.x.x.x</code> (fritz.box)</td>
+        </tr>
+        <tr>
+          <td><strong>Modem 4G (Riserva)</strong></td>
+          <td><strong style="color:#0055b8;">***RIMOSSO***</strong></td>
+          <td><code>***RIMOSSO***</code></td>
+          <td>DHCP Automatico</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:4px;">Una volta connessi al Wi-Fi, aprire Google Chrome o Safari all'indirizzo:</p>
     <table>
       <thead>
         <tr>
@@ -234,22 +260,22 @@ html_content = """<!DOCTYPE html>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Pannello di Controllo</strong></td>
-          <td><code>http://segnapunti.local/admin</code><br>oppure <code>http://x.x.x.x/admin</code></td>
-          <td><strong>Accesso Automatico</strong><br>(Default: admin / admin)</td>
-          <td>Interfaccia completa per gestire punti, set, timeout, cambi campo e temi.</td>
+          <td><strong>Pannello Controllo</strong></td>
+          <td><code>http://segnapunti.local/admin</code> (o <code>x.x.x.x/admin</code>)</td>
+          <td><strong>Auto-Login</strong> (admin/admin)</td>
+          <td>Punti, set, timeout, cambi campo e temi.</td>
         </tr>
         <tr>
           <td><strong>Schermo Tabellone</strong></td>
-          <td><code>http://segnapunti.local</code><br>oppure <code>http://x.x.x.x</code></td>
+          <td><code>http://segnapunti.local</code> (o <code>x.x.x.x</code>)</td>
           <td>Nessuna</td>
-          <td>Schermata pulita solo visualizzazione (proiettata in automatico sulla TV).</td>
+          <td>Solo visualizzazione (proiettata su TV).</td>
         </tr>
         <tr>
           <td><strong>Video Delay Replay</strong></td>
           <td><code>http://x.x.x.x:4000</code></td>
           <td>Nessuna</td>
-          <td>Replay istantaneo telecamera campo con ritardo regolabile.</td>
+          <td>Replay stream telecamera campo.</td>
         </tr>
       </tbody>
     </table>
