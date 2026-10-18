@@ -28,58 +28,58 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
 
   themes = [
     {
-      label: 'FIPAV (Blu vs Giallo)',
-      bg: '#000000', fg: '#ffffff',
-      homeBg: '#0044cc', homeFg: '#ffffff',
-      awayBg: '#ffcc00', awayFg: '#000000',
-      setBg: '#ffffff', setFg: '#000000',
-      pointBg: '#ff5500', pointFg: '#ffffff',
-      timeoutBg: '#ffffff', videoCheckBg: '#ffffff'
+      label: 'FIPAV (Blu & Oro)',
+      bg: '#070c16', fg: '#ffffff',
+      homeBg: '#004bbb', homeFg: '#ffffff',
+      awayBg: '#f59e0b', awayFg: '#070c16',
+      setBg: '#0e1a2e', setFg: '#ffffff',
+      pointBg: '#0e1a2e', pointFg: '#ffffff',
+      timeoutBg: '#ff3b30', videoCheckBg: '#ff3b30'
     },
     {
-      label: 'Serie A (Rosso vs Blu)',
-      bg: '#0f172a', fg: '#f8fafc',
-      homeBg: '#dc2626', homeFg: '#ffffff',
-      awayBg: '#2563eb', awayFg: '#ffffff',
-      setBg: '#38bdf8', setFg: '#0f172a',
-      pointBg: '#ffffff', pointFg: '#0f172a',
-      timeoutBg: '#facc15', videoCheckBg: '#facc15'
+      label: 'Superlega Derby (Rosso & Blu)',
+      bg: '#0b0e14', fg: '#ffffff',
+      homeBg: '#c51d24', homeFg: '#ffffff',
+      awayBg: '#1d4ed8', awayFg: '#ffffff',
+      setBg: '#131923', setFg: '#ffffff',
+      pointBg: '#131923', pointFg: '#ffffff',
+      timeoutBg: '#ff3b30', videoCheckBg: '#ff3b30'
     },
     {
-      label: 'Smeraldo vs Oro',
-      bg: '#18181b', fg: '#ffffff',
-      homeBg: '#16a34a', homeFg: '#ffffff',
-      awayBg: '#ca8a04', awayFg: '#000000',
-      setBg: '#e4e4e7', setFg: '#18181b',
-      pointBg: '#ffffff', pointFg: '#18181b',
-      timeoutBg: '#ffffff', videoCheckBg: '#ffffff'
+      label: 'Smeraldo & Oro',
+      bg: '#061210', fg: '#ffffff',
+      homeBg: '#059669', homeFg: '#ffffff',
+      awayBg: '#d97706', awayFg: '#ffffff',
+      setBg: '#0b201b', setFg: '#ffffff',
+      pointBg: '#0b201b', pointFg: '#ffffff',
+      timeoutBg: '#ef4444', videoCheckBg: '#ef4444'
     },
     {
-      label: 'Lakers (Viola vs Giallo)',
-      bg: '#09090b', fg: '#ffffff',
+      label: 'Showdown Night (Viola & Giallo)',
+      bg: '#0b0716', fg: '#ffffff',
       homeBg: '#7c3aed', homeFg: '#ffffff',
-      awayBg: '#eab308', awayFg: '#000000',
-      setBg: '#ffffff', setFg: '#09090b',
-      pointBg: '#06b6d4', pointFg: '#000000',
-      timeoutBg: '#ffffff', videoCheckBg: '#ffffff'
+      awayBg: '#eab308', awayFg: '#0b0716',
+      setBg: '#151025', setFg: '#ffffff',
+      pointBg: '#151025', pointFg: '#ffffff',
+      timeoutBg: '#f43f5e', videoCheckBg: '#f43f5e'
     },
     {
-      label: 'Italia (Azzurro vs Rosso)',
-      bg: '#020617', fg: '#ffffff',
+      label: 'Azzurri Italia (Azzurro & Rosso)',
+      bg: '#060f1c', fg: '#ffffff',
+      homeBg: '#0055b8', homeFg: '#ffffff',
+      awayBg: '#dc2626', awayFg: '#ffffff',
+      setBg: '#0d192c', setFg: '#ffffff',
+      pointBg: '#0d192c', pointFg: '#ffffff',
+      timeoutBg: '#ff3b30', videoCheckBg: '#ff3b30'
+    },
+    {
+      label: 'OLED Stealth (Nero, Ciano & Rubino)',
+      bg: '#000000', fg: '#ffffff',
       homeBg: '#0284c7', homeFg: '#ffffff',
       awayBg: '#e11d48', awayFg: '#ffffff',
-      setBg: '#f1f5f9', setFg: '#020617',
-      pointBg: '#ffffff', pointFg: '#020617',
+      setBg: '#11141c', setFg: '#ffffff',
+      pointBg: '#11141c', pointFg: '#ffffff',
       timeoutBg: '#f59e0b', videoCheckBg: '#f59e0b'
-    },
-    {
-      label: 'Monocromo Alto Contrasto',
-      bg: '#000000', fg: '#ffffff',
-      homeBg: '#ffffff', homeFg: '#000000',
-      awayBg: '#475569', awayFg: '#ffffff',
-      setBg: '#94a3b8', setFg: '#000000',
-      pointBg: '#ffffff', pointFg: '#000000',
-      timeoutBg: '#38bdf8', videoCheckBg: '#38bdf8'
     }
   ];
 
