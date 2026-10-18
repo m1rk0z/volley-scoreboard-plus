@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   @Input() error: string | null;
 
   form: FormGroup = new FormGroup({
-    username: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
+    username: new FormControl('admin', Validators.required),
+    password: new FormControl('admin', Validators.required),
   });
 
   destroyed$ = new Subject();
@@ -40,11 +40,19 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (this.scoreboardService.isAuthenticated()) {
+      this.router.navigate(['/admin']);
+      return;
+    }
+
     this.scoreboardService.prefs$.pipe(
       takeUntil(this.destroyed$)
     ).subscribe((prefs: ScoreboardPrefs) => {
       this.prefs = prefs;
       this.loading = (prefs == null);
+      if (prefs != null && !this.waitingLoginRes && !this.scoreboardService.isAuthenticated()) {
+        this.submit();
+      }
     });
   }
 

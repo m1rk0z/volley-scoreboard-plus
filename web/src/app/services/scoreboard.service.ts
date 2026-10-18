@@ -61,6 +61,17 @@ export class ScoreboardService {
     this.webSocketService.url = basePath.replace('/api/', '/ws/');
 
 
+    const savedSession = localStorage.getItem('scoreboard_session');
+    if (savedSession) {
+      try {
+        const s = JSON.parse(savedSession);
+        if (s && s.token) {
+          this.defaultService.configuration.accessToken = s.token;
+          this.session.next(s);
+        }
+      } catch (e) {}
+    }
+
     this.webSocketService.connect().subscribe({
       next: (message: ScoreboardMessage) => {
         if (message.status) {
@@ -94,6 +105,9 @@ export class ScoreboardService {
       if (session && session.token) {
         this.defaultService.configuration.accessToken = session.token;
         this.session.next(session);
+        try {
+          localStorage.setItem('scoreboard_session', JSON.stringify(session));
+        } catch (e) {}
       }
 
       return session;
@@ -101,6 +115,9 @@ export class ScoreboardService {
   }
 
   logout() {
+    try {
+      localStorage.removeItem('scoreboard_session');
+    } catch (e) {}
     this.session.next(null);
   }
 
