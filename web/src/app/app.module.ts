@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
@@ -34,18 +34,19 @@ import { UpDownComponent } from './components/up-down/up-down.component';
 import { VideoChecksComponent } from './components/video-checks/video-checks.component';
 
 import { ColorPickerModule } from 'ngx-color-picker';
-import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { NgZorroAntdModule, NZ_I18N, it_IT } from 'ng-zorro-antd';
 
 // hotkey hosrtcut
 import {HotkeyModule} from 'angular2-hotkeys';
 
 // config angular i18n
 import { registerLocaleData } from '@angular/common';
-import en from '@angular/common/locales/en';
+import it from '@angular/common/locales/it';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { WinnerComponent } from './components/winner/winner.component';
 import { WaitingComponent } from './components/waiting/waiting.component';
-registerLocaleData(en);
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+registerLocaleData(it);
 
 export class HammerConfig extends HammerGestureConfig {
   overrides = {
@@ -89,8 +90,13 @@ export class HammerConfig extends HammerGestureConfig {
     PreferencesComponent
   ],
   providers: [
-    { provide: NZ_I18N, useValue: en_US },
+    { provide: NZ_I18N, useValue: it_IT },
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: HammerConfig

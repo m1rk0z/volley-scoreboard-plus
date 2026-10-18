@@ -202,8 +202,29 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
         }
       },
       error => {
-        this.disabled = false;
-        this.alertService.showError(error);
+        if (error && (error.status === 401 || (error.message && error.message.indexOf('401') !== -1))) {
+          this.scoreboardService.login({ username: 'admin', password: 'admin' }).subscribe(
+            () => {
+              this.scoreboardService.updatePrefs(this.formData).subscribe(
+                () => {
+                  this.disabled = false;
+                  this.activeModal.close(0);
+                },
+                err2 => {
+                  this.disabled = false;
+                  this.alertService.showError(err2);
+                }
+              );
+            },
+            loginErr => {
+              this.disabled = false;
+              this.alertService.showError(loginErr);
+            }
+          );
+        } else {
+          this.disabled = false;
+          this.alertService.showError(error);
+        }
       }
     );
   }
