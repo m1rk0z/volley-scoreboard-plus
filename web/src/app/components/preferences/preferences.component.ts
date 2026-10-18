@@ -26,6 +26,80 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
   disabled = false;
   previewed = false;
 
+  themes = [
+    {
+      label: 'FIPAV (Blu vs Giallo)',
+      bg: '#000000', fg: '#ffffff',
+      homeBg: '#0044cc', homeFg: '#ffffff',
+      awayBg: '#ffcc00', awayFg: '#000000',
+      setBg: '#ffffff', setFg: '#000000',
+      pointBg: '#ff5500', pointFg: '#ffffff',
+      timeoutBg: '#ffffff', videoCheckBg: '#ffffff'
+    },
+    {
+      label: 'Serie A (Rosso vs Blu)',
+      bg: '#0f172a', fg: '#f8fafc',
+      homeBg: '#dc2626', homeFg: '#ffffff',
+      awayBg: '#2563eb', awayFg: '#ffffff',
+      setBg: '#38bdf8', setFg: '#0f172a',
+      pointBg: '#ffffff', pointFg: '#0f172a',
+      timeoutBg: '#facc15', videoCheckBg: '#facc15'
+    },
+    {
+      label: 'Smeraldo vs Oro',
+      bg: '#18181b', fg: '#ffffff',
+      homeBg: '#16a34a', homeFg: '#ffffff',
+      awayBg: '#ca8a04', awayFg: '#000000',
+      setBg: '#e4e4e7', setFg: '#18181b',
+      pointBg: '#ffffff', pointFg: '#18181b',
+      timeoutBg: '#ffffff', videoCheckBg: '#ffffff'
+    },
+    {
+      label: 'Lakers (Viola vs Giallo)',
+      bg: '#09090b', fg: '#ffffff',
+      homeBg: '#7c3aed', homeFg: '#ffffff',
+      awayBg: '#eab308', awayFg: '#000000',
+      setBg: '#ffffff', setFg: '#09090b',
+      pointBg: '#06b6d4', pointFg: '#000000',
+      timeoutBg: '#ffffff', videoCheckBg: '#ffffff'
+    },
+    {
+      label: 'Italia (Azzurro vs Rosso)',
+      bg: '#020617', fg: '#ffffff',
+      homeBg: '#0284c7', homeFg: '#ffffff',
+      awayBg: '#e11d48', awayFg: '#ffffff',
+      setBg: '#f1f5f9', setFg: '#020617',
+      pointBg: '#ffffff', pointFg: '#020617',
+      timeoutBg: '#f59e0b', videoCheckBg: '#f59e0b'
+    },
+    {
+      label: 'Monocromo Alto Contrasto',
+      bg: '#000000', fg: '#ffffff',
+      homeBg: '#ffffff', homeFg: '#000000',
+      awayBg: '#475569', awayFg: '#ffffff',
+      setBg: '#94a3b8', setFg: '#000000',
+      pointBg: '#ffffff', pointFg: '#000000',
+      timeoutBg: '#38bdf8', videoCheckBg: '#38bdf8'
+    }
+  ];
+
+  applyTheme(theme: any): void {
+    this.formGroup.patchValue({
+      bg: theme.bg,
+      fg: theme.fg,
+      homeBg: theme.homeBg,
+      homeFg: theme.homeFg,
+      awayBg: theme.awayBg,
+      awayFg: theme.awayFg,
+      setBg: theme.setBg,
+      setFg: theme.setFg,
+      pointBg: theme.pointBg,
+      pointFg: theme.pointFg,
+      timeoutBg: theme.timeoutBg,
+      videoCheckBg: theme.videoCheckBg
+    });
+  }
+
   constructor(public activeModal: NgbActiveModal,
               private formBuilder: FormBuilder,
               private changeDetectorRef: ChangeDetectorRef,

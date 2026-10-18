@@ -1,13 +1,17 @@
 .timeout-container {
   font-size: 5vh;
-  font-size: calc(var(--vh, 1vh) *5);
+  font-size: calc(var(--vh, 1vh) * 5);
   font-variant: small-caps;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 10px;
   .timeout-flag {
-    border-width: medium;
+    border-width: 3px;
     border-style: solid;
-    border-radius: 25%;
+    border-radius: 20%;
+    transition: all 0.2s ease-in-out;
     &.off {
       background-color: transparent !important;
+      opacity: 0.45;
     }
   }
 }

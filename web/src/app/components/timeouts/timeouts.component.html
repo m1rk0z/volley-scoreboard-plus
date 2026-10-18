@@ -2,11 +2,13 @@
   <div class="w-30 d-flex flex-row-reverse p-3" (tap)="homeTimeoutTap.emit()">
     <div class="timeout-flag h-100 w-30 mx-1"
          [class.off]="home < 1"
-         [style.background-color]="bg">
+         [style.background-color]="homeBg || bg"
+         [style.border-color]="homeBg || bg">
     </div>
     <div class="timeout-flag h-100 w-30 mx-1"
          [class.off]="home < 2"
-         [style.background-color]="bg">
+         [style.background-color]="homeBg || bg"
+         [style.border-color]="homeBg || bg">
     </div>
   </div>
   <div class="w-40 d-flex justify-content-center align-items-center">
@@ -15,11 +17,13 @@
   <div class="w-30 d-flex flex-row p-3" (tap)="awayTimeoutTap.emit()">
     <div class="timeout-flag h-100 w-30 mx-1"
          [class.off]="away < 1"
-         [style.background-color]="bg">
+         [style.background-color]="awayBg || bg"
+         [style.border-color]="awayBg || bg">
     </div>
     <div class="timeout-flag h-100 w-30 mx-1"
          [class.off]="away < 2"
-         [style.background-color]="bg">
+         [style.background-color]="awayBg || bg"
+         [style.border-color]="awayBg || bg">
     </div>
   </div>
 </div>

@@ -57,7 +57,10 @@ func (m *jsonScoreboardStatusStore) Update(status *api.ScoreboardStatus) error {
 	if err != nil {
 		return err
 	}
-	return m.save()
+	go func() {
+		_ = m.save()
+	}()
+	return nil
 }
 
 func (m *jsonScoreboardStatusStore) save() error {
@@ -134,7 +137,10 @@ func (m *jsonScoreboardPrefsStore) Update(prefs *api.ScoreboardPrefs) error {
 	if err != nil {
 		return err
 	}
-	return m.save()
+	go func() {
+		_ = m.save()
+	}()
+	return nil
 }
 
 func (m *jsonScoreboardPrefsStore) Reset() error {

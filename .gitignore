@@ -59,6 +59,8 @@ tls/
 
 ### Local binary ###
 bin/
+scoreboard-plus*
+test_bin*
 
 ### Local temp ###
 tmp/

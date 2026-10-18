@@ -4,8 +4,10 @@ import (
 	"mime"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
+	"github.com/mgeri/volley-scoreboard-plus/pkg/api"
 	"github.com/mgeri/volley-scoreboard-plus/store"
 	jsonstore "github.com/mgeri/volley-scoreboard-plus/store/json"
 
@@ -120,17 +122,54 @@ func ListenAndServe() {
 		Addr: viper.GetString("server.address"),
 	}
 
-	// admin redirect to angular application admin panel
-	e.GET("/admin", func(c echo.Context) error {
-		return c.Redirect(http.StatusTemporaryRedirect, "/#/admin")
-	})
-
 	// Register handlers
 	app.registerHandlersAPI(e.Group("/api/v1"))
 	app.registerHandlersWS(e.Group("/ws/v1"))
 
+	// Swap sides (Inversione Campo) endpoint
+	e.POST("/api/v1/scoreboard/swap", func(c echo.Context) error {
+		// 1. Swap status (points, sets, timeouts, ball owner)
+		var status api.ScoreboardStatus
+		if err := app.statusStore.Get(&status); err == nil {
+			status.Home, status.Away = status.Away, status.Home
+			if status.BallOwner == "home" {
+				status.BallOwner = "away"
+			} else if status.BallOwner == "away" {
+				status.BallOwner = "home"
+			}
+			_ = app.statusStore.Update(&status)
+			app.BroadcastStatusUpdate()
+		}
+
+		// 2. Swap prefs (team names, colors)
+		var prefs api.ScoreboardPrefs
+		if err := app.prefsStore.Get(&prefs); err == nil {
+			prefs.HomeName, prefs.AwayName = prefs.AwayName, prefs.HomeName
+			prefs.HomeBg, prefs.AwayBg = prefs.AwayBg, prefs.HomeBg
+			prefs.HomeFg, prefs.AwayFg = prefs.AwayFg, prefs.HomeFg
+			_ = app.prefsStore.Update(&prefs)
+			app.BroadcastPrefsUpdate()
+		}
+
+		return c.NoContent(http.StatusOK)
+	})
+
+	// SPA support: serve index.html directly for frontend routes (no hash needed)
+	webDir := viper.GetString("server.webAppDir")
+	indexPath := filepath.Join(webDir, "index.html")
+	spaHandler := func(c echo.Context) error {
+		return c.File(indexPath)
+	}
+
+	e.GET("/admin", spaHandler)
+	e.GET("/admin/*", spaHandler)
+	e.GET("/scoreboard", spaHandler)
+	e.GET("/scoreboard/*", spaHandler)
+	e.GET("/login", spaHandler)
+	e.GET("/login/*", spaHandler)
+
 	// static web ui
-	e.Static("/", viper.GetString("server.webAppDir"))
+	e.Static("/", webDir)
 
 	// start
 	e.Logger.Fatal(e.StartServer(s))

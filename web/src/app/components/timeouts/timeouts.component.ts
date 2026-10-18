@@ -14,6 +14,8 @@ export class TimeoutsComponent implements OnInit {
   @Input() away = 0;
   @Input() name = 'Timeouts';
   @Input() bg = '#FF0000';
+  @Input() homeBg: string;
+  @Input() awayBg: string;
 
   constructor() {
   }

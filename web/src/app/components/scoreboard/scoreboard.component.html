@@ -104,9 +104,9 @@
           </app-sets>
         </div>
         <div class="d-flex flex-column w-60">
-          <div class="h-50">
+          <div class="h-100">
             <app-timeouts [home]="status.home.timeouts" [away]="status.away.timeouts" [name]="prefs.timeoutName"
-              [bg]="prefs.timeoutBg" (homeTimeoutTap)="homeTimeoutTap.emit()" (awayTimeoutTap)="awayTimeoutTap.emit()">
+              [homeBg]="prefs.homeBg" [awayBg]="prefs.awayBg" [bg]="prefs.timeoutBg" (homeTimeoutTap)="homeTimeoutTap.emit()" (awayTimeoutTap)="awayTimeoutTap.emit()">
             </app-timeouts>
           </div>
           <div class="h-50">
