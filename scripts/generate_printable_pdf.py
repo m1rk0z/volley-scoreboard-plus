@@ -1,70 +1,78 @@
 import os
 import sys
+import base64
 from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 OUTPUT_WORKSPACE = r"c:\Users\mcominardi\Desktop\Progetti\Rasberry-pi 5\Guida-Volley-Scoreboard.pdf"
 OUTPUT_DESKTOP = r"c:\Users\mcominardi\Desktop\Guida-Volley-Scoreboard.pdf"
+QR_PATH = r"c:\Users\mcominardi\Desktop\Progetti\Rasberry-pi 5\scripts\wifi_qr.png"
 
-html_content = """<!DOCTYPE html>
+# Read QR Code in base64
+qr_b64 = ""
+if os.path.exists(QR_PATH):
+    with open(QR_PATH, "rb") as f:
+        qr_b64 = base64.b64encode(f.read()).decode("ascii")
+
+html_content = f"""<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="utf-8">
   <title>Manuale Operativo - Volley Scoreboard Plus</title>
   <style>
-    @page {
+    @page {{
       size: A4;
-      margin: 12mm 14mm 12mm 14mm;
-      @bottom-right {
+      margin: 10mm 13mm 10mm 13mm;
+      @bottom-right {{
         content: counter(page) " / " counter(pages);
-      }
-    }
+      }}
+    }}
 
-    * {
+    * {{
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
+    }}
 
-    body {
+    body {{
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: #1e293b;
       line-height: 1.35;
-      font-size: 10pt;
+      font-size: 9.8pt;
       background: #ffffff;
-    }
+    }}
 
-    .cover-header {
+    .cover-header {{
       background: linear-gradient(135deg, #0b1528 0%, #1e3a8a 100%);
       color: #ffffff;
-      padding: 14px 18px;
+      padding: 12px 16px;
       border-radius: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       border-bottom: 3.5px solid #f59e0b;
-    }
+    }}
 
-    .cover-header h1 {
-      font-size: 17pt;
+    .cover-header h1 {{
+      font-size: 16pt;
       font-weight: 800;
       letter-spacing: -0.5px;
       margin-bottom: 2px;
       color: #ffffff;
-    }
+    }}
 
-    .cover-header .subtitle {
-      font-size: 10pt;
+    .cover-header .subtitle {{
+      font-size: 9.5pt;
       color: #93c5fd;
       font-weight: 500;
-    }
+    }}
 
-    .badge-row {
-      margin-top: 6px;
+    .badge-row {{
+      margin-top: 5px;
       display: flex;
       gap: 6px;
-    }
+    }}
 
-    .badge {
+    .badge {{
       display: inline-block;
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.25);
@@ -73,136 +81,165 @@ html_content = """<!DOCTYPE html>
       border-radius: 4px;
       font-size: 8pt;
       font-weight: 600;
-    }
+    }}
 
-    .card {
+    .card {{
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 6px;
-      padding: 10px 14px;
-      margin-bottom: 10px;
+      padding: 9px 12px;
+      margin-bottom: 9px;
       page-break-inside: avoid;
-    }
+    }}
 
-    .card.highlight {
+    .card.highlight {{
       border-left: 4px solid #0055b8;
       background: #f0f7ff;
-    }
+    }}
 
-    .card.amber {
+    .card.amber {{
       border-left: 4px solid #f59e0b;
       background: #fffbeb;
-    }
+    }}
 
-    h2 {
-      font-size: 13pt;
+    h2 {{
+      font-size: 12pt;
       font-weight: 700;
       color: #0f172a;
-      margin-bottom: 8px;
-      padding-bottom: 4px;
+      margin-bottom: 6px;
+      padding-bottom: 3px;
       border-bottom: 1.5px solid #cbd5e1;
       display: flex;
       align-items: center;
       gap: 6px;
-    }
+    }}
 
-    h3 {
-      font-size: 11pt;
+    h3 {{
+      font-size: 10.5pt;
       font-weight: 600;
       color: #1e3a8a;
-      margin-top: 10px;
-      margin-bottom: 5px;
-    }
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }}
 
-    p {
-      margin-bottom: 6px;
-    }
+    p {{
+      margin-bottom: 4px;
+    }}
 
-    table {
+    table {{
       width: 100%;
       border-collapse: collapse;
-      margin: 8px 0 12px 0;
-      font-size: 9.5pt;
-    }
+      margin: 6px 0 8px 0;
+      font-size: 9pt;
+    }}
 
-    th, td {
+    th, td {{
       border: 1px solid #cbd5e1;
-      padding: 6px 10px;
+      padding: 5px 8px;
       text-align: left;
-    }
+    }}
 
-    th {
+    th {{
       background: #e2e8f0;
       color: #0f172a;
       font-weight: 700;
-    }
+    }}
 
-    tr:nth-child(even) td {
+    tr:nth-child(even) td {{
       background: #f8fafc;
-    }
+    }}
 
-    .key-badge {
+    .key-badge {{
       display: inline-block;
       background: #0f172a;
       color: #ffffff;
       font-family: monospace;
       font-weight: bold;
-      padding: 2px 7px;
+      padding: 2px 6px;
       border-radius: 4px;
-      font-size: 9pt;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-    }
+      font-size: 8.5pt;
+    }}
 
-    .grid-2 {
+    .grid-2 {{
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
+      gap: 10px;
+      margin-bottom: 8px;
+    }}
 
-    .theme-box {
-      border: 1px solid #cbd5e1;
+    .wifi-flex {{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }}
+
+    .wifi-qr-box {{
+      text-align: center;
+      background: #ffffff;
+      padding: 6px;
       border-radius: 6px;
-      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      flex-shrink: 0;
+    }}
+
+    .wifi-qr-box img {{
+      width: 96px;
+      height: 96px;
+      display: block;
+      margin: 0 auto;
+    }}
+
+    .wifi-qr-box span {{
+      display: block;
+      font-size: 7.5pt;
+      font-weight: bold;
+      color: #0f172a;
+      margin-top: 3px;
+    }}
+
+    .theme-box {{
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 8px;
       background: #ffffff;
       font-size: 8.5pt;
-    }
+    }}
 
-    .theme-color-dots {
+    .theme-color-dots {{
       display: flex;
       gap: 5px;
-      margin-top: 4px;
+      margin-top: 3px;
       align-items: center;
-    }
+    }}
 
-    .dot {
-      width: 14px;
-      height: 14px;
+    .dot {{
+      width: 12px;
+      height: 12px;
       border-radius: 3px;
       border: 1px solid rgba(0,0,0,0.2);
-    }
+    }}
 
-    .page-break {
+    .page-break {{
       page-break-before: always;
-    }
+    }}
 
-    .footer-note {
+    .footer-note {{
       font-size: 8pt;
       color: #64748b;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 10px;
       border-top: 1px solid #e2e8f0;
-      padding-top: 8px;
-    }
+      padding-top: 6px;
+    }}
 
-    ul, ol {
-      margin-left: 20px;
-      margin-bottom: 8px;
-    }
+    ul, ol {{
+      margin-left: 18px;
+      margin-bottom: 6px;
+    }}
 
-    li {
-      margin-bottom: 3px;
-    }
+    li {{
+      margin-bottom: 2px;
+    }}
   </style>
 </head>
 <body>
@@ -214,39 +251,48 @@ html_content = """<!DOCTYPE html>
     <div class="badge-row">
       <span class="badge">Palasport DDN</span>
       <span class="badge">Raspberry Pi 5</span>
-      <span class="badge">Versione 2026</span>
+      <span class="badge">FRITZ!Box 7530</span>
       <span class="badge">FIPAV / Superlega Grade</span>
     </div>
   </div>
 
   <!-- SEZIONE 1: RETE WI-FI E ACCESSO RAPIDO -->
   <div class="card highlight">
-    <h2>1. Rete Wi-Fi FRITZ!Box & Accesso Smartphone / Tablet</h2>
-    <p>Connettere lo smartphone o il tablet alla rete Wi-Fi del palazzetto per gestire il segnapunti:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Rete</th>
-          <th>Nome Wi-Fi (SSID)</th>
-          <th>Password</th>
-          <th>Gateway / Router</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>FRITZ!Box (Principale)</strong></td>
-          <td><strong style="color:#0055b8;">***RIMOSSO***</strong></td>
-          <td><code>***RIMOSSO***</code></td>
-          <td><code>x.x.x.x</code> (fritz.box)</td>
-        </tr>
-        <tr>
-          <td><strong>Modem 4G (Riserva)</strong></td>
-          <td><strong style="color:#0055b8;">***RIMOSSO***</strong></td>
-          <td><code>***RIMOSSO***</code></td>
-          <td>DHCP Automatico</td>
-        </tr>
-      </tbody>
-    </table>
+    <h2>1. Rete Wi-Fi Palasport (FRITZ!Box 7530) & Accesso da Smartphone / Tablet</h2>
+    
+    <div class="wifi-flex">
+      <div style="flex-grow: 1;">
+        <p>Connettere lo smartphone o il tablet alla rete Wi-Fi del palazzetto per gestire il segnapunti:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Rete Wi-Fi</th>
+              <th>Nome Rete (SSID)</th>
+              <th>Password (Chiave)</th>
+              <th>Dettagli / Router</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FRITZ!Box (Ufficiale)</strong></td>
+              <td><strong style="color:#0055b8; font-size:10.5pt;">Segnapunti</strong></td>
+              <td><code style="font-size:10pt; font-weight:bold;">***RIMOSSO***</code></td>
+              <td>2.4 / 5 GHz • Gateway: <code>x.x.x.x</code></td>
+            </tr>
+            <tr>
+              <td><strong>Modem 4G (Riserva)</strong></td>
+              <td><strong style="color:#0055b8;">***RIMOSSO***</strong></td>
+              <td><code>***RIMOSSO***</code></td>
+              <td>Access Point portatile di backup</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="wifi-qr-box">
+        <img src="data:image/png;base64,{qr_b64}" alt="QR Wi-Fi Segnapunti">
+        <span>Inquadra per connetterti</span>
+      </div>
+    </div>
 
     <p style="margin-top:4px;">Una volta connessi al Wi-Fi, aprire Google Chrome o Safari all'indirizzo:</p>
     <table>
@@ -436,14 +482,14 @@ html_content = """<!DOCTYPE html>
   </div>
 
   <div class="footer-note">
-    Documento redatto per ASD Multisports DDN • Volley Scoreboard Plus su Raspberry Pi 5 • Repository: github.com/m1rk0z/volley-scoreboard-plus
+    Documento redatto per ASD Multisports DDN • Volley Scoreboard Plus su Raspberry Pi 5 • FRITZ!Box 7530 • Repository: github.com/m1rk0z/volley-scoreboard-plus
   </div>
 
 </body>
 </html>
 """
 
-print("Rendering printable PDF via system Chrome...")
+print("Rendering printable PDF with official FRITZ!Box Segnapunti QR Code...")
 with sync_playwright() as p:
     browser = p.chromium.launch(channel="chrome")
     page = browser.new_page()
@@ -452,7 +498,7 @@ with sync_playwright() as p:
     pdf_bytes = page.pdf(
         format="A4",
         print_background=True,
-        margin={"top": "12mm", "bottom": "12mm", "left": "12mm", "right": "12mm"}
+        margin={"top": "10mm", "bottom": "10mm", "left": "12mm", "right": "12mm"}
     )
     
     with open(OUTPUT_WORKSPACE, "wb") as f:

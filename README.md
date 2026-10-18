@@ -41,13 +41,13 @@ Inoltre, integra un sistema di **Video Delay Replay** via RTSP su monitor dedica
 - **Utente Display Locale (TV):** `mirko` (Gnome Kiosk Wayland)
 - **Stream Camera RTSP:** `rtsp://x.x.x.x:8554/live`
 
-### 📶 Reti Wi-Fi del Palazzetto (FRITZ!Box & Riserva)
+### 📶 Reti Wi-Fi del Palazzetto (FRITZ!Box 7530 & Riserva)
 Per connettere gli smartphone, i tablet o i computer al sistema segnapunti e al pannello admin:
 
-| Rete | Nome Wi-Fi (SSID) | Password | Gateway / Router | IP Raspberry Pi 5 |
-|---|---|---|---|---|
-| **FRITZ!Box (Principale)** | `***RIMOSSO***` | `***RIMOSSO***` | `x.x.x.x` (fritz.box) | `x.x.x.x` |
-| **Modem 4G (Riserva)** | `***RIMOSSO***` | `***RIMOSSO***` | DHCP Automatico | DHCP |
+| Rete | Nome Wi-Fi (SSID) | Password (Chiave) | Standard / Frequenze | Gateway / Router | IP Raspberry Pi 5 |
+|---|---|---|---|---|---|
+| **FRITZ!Box 7530 (Ufficiale)** | **`Segnapunti`** | **`***RIMOSSO***`** | WPA+WPA2 (2.4 & 5 GHz) | `x.x.x.x` (*fritz.box*) | `x.x.x.x` |
+| **Modem 4G (Riserva)** | `***RIMOSSO***` | `***RIMOSSO***` | WPA2 | DHCP Automatico | DHCP |
 
 
 ---
