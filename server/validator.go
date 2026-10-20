@@ -1,6 +1,8 @@
 package server
 
 import (
+	"errors"
+
 	"github.com/mgeri/volley-scoreboard-plus/pkg/api"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -8,6 +10,14 @@ import (
 )
 
 func ValidateScoreboardTeamStatus(m *api.ScoreboardTeamStatus) error {
+	if len(m.SetScores) > 9 {
+		return errors.New("setScores: too many sets")
+	}
+	for _, p := range m.SetScores {
+		if p < 0 || p > 99 {
+			return errors.New("setScores: points must be between 0 and 99")
+		}
+	}
 	return validation.ValidateStruct(m,
 		validation.Field(&m.Points, validation.Min(0), validation.Max(99)),
 		validation.Field(&m.Sets, validation.Min(0), validation.Max(9)),
@@ -45,6 +55,7 @@ func ValidateScoreboardPrefs(m *api.ScoreboardPrefs) error {
 		validation.Field(&m.AwayName, validation.Required),
 		validation.Field(&m.AwayBg, validation.Required, is.HexColor),
 		validation.Field(&m.AwayFg, validation.Required, is.HexColor),
+		validation.Field(&m.Layout, validation.In("classic", "broadcast", "blocks", "arena", "split")),
 	)
 }
 

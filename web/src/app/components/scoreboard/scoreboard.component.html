@@ -6,7 +6,7 @@
   [style.color]="prefs.fg">
   <app-winner></app-winner>
 </div>
-<div *ngIf="!loading && (!status || !status.showWinner)" class="w-100 h-100 text-center"
+<div *ngIf="!loading && (!status || !status.showWinner) && layout === 'classic'" class="w-100 h-100 text-center"
   [style.background-color]="prefs.bg" [style.color]="prefs.fg">
 
   <div *ngIf="animSpider" id="other">
@@ -125,3 +125,73 @@
     </div>
   </div>
 </div>
+
+<!-- Layout moderni: broadcast, blocks, arena, split (stesso markup, cambia lo stile) -->
+<div *ngIf="!loading && status && !status.showWinner && layout !== 'classic'" #board class="bx" [ngClass]="'v-' + layout">
+  <div class="in">
+    <div class="top">
+      <div class="club">
+        <img *ngIf="isHeaderVisible()" [src]="getLogoUrl()" onerror="this.style.display='none'">
+      </div>
+      <div class="chip" (tap)="currentSetTap.emit()">{{prefs.setName | uppercase}} {{setNumber()}}</div>
+      <div class="badge-slot">
+        <div *ngIf="badge() as b" class="badge" [class.pulse]="b.pulse">{{b.text}}</div>
+      </div>
+    </div>
+
+    <div class="mid">
+      <div class="team home" [class.serving]="status.ballOwner === TeamBallOwner.Home">
+        <div class="nm" (tap)="nameTap.emit()" (swipeleft)="homeNameSwipeLeft.emit()" (swiperight)="homeNameSwipeRight.emit()">
+          <ng-container *ngTemplateOutlet="ball"></ng-container>
+          <span>{{prefs.homeName}}</span>
+        </div>
+        <div class="score" (tap)="homePointSwipeUp.emit()" (swipeup)="homePointSwipeUp.emit()" (swipedown)="homePointSwipeDown.emit()">{{status.home.points}}</div>
+      </div>
+
+      <div class="sets" (tap)="currentSetTap.emit()">
+        <div class="n">
+          <span (swipeup)="homeSetSwipeUp.emit()" (swipedown)="homeSetSwipeDown.emit()">{{status.home.sets}}</span>–<span
+                (swipeup)="awaySetSwipeUp.emit()" (swipedown)="awaySetSwipeDown.emit()">{{status.away.sets}}</span>
+        </div>
+        <div class="l">{{prefs.setName | uppercase}}</div>
+      </div>
+
+      <div class="team away" [class.serving]="status.ballOwner === TeamBallOwner.Away">
+        <div class="nm" (tap)="nameTap.emit()">
+          <ng-container *ngTemplateOutlet="ball"></ng-container>
+          <span>{{prefs.awayName}}</span>
+        </div>
+        <div class="score" (tap)="awayPointSwipeUp.emit()" (swipeup)="awayPointSwipeUp.emit()" (swipedown)="awayPointSwipeDown.emit()">{{status.away.points}}</div>
+      </div>
+    </div>
+
+    <div class="bot">
+      <div class="tos home" (tap)="homeTimeoutTap.emit()">
+        <em>T.O.</em><i [class.on]="status.home.timeouts >= 1"></i><i [class.on]="status.home.timeouts >= 2"></i>
+      </div>
+      <div *ngIf="timer; else partialsTpl" class="timer" [class.warn]="timer.left <= 5">
+        <span class="w">{{prefs.timeoutName | uppercase}} {{timerTeamName()}}</span>
+        <span class="t">{{timerText()}}</span>
+        <span class="bar" [style.width.%]="timerPercent()"></span>
+      </div>
+      <ng-template #partialsTpl>
+        <div class="partials">
+          <span *ngFor="let p of partials()"><b [class.lo]="p[0] < p[1]">{{p[0]}}</b>–<b [class.lo]="p[1] < p[0]">{{p[1]}}</b></span>
+        </div>
+      </ng-template>
+      <div class="tos away" (tap)="awayTimeoutTap.emit()">
+        <i [class.on]="status.away.timeouts >= 1"></i><i [class.on]="status.away.timeouts >= 2"></i><em>T.O.</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pallone della battuta: visibile solo sulla squadra al servizio (.serving) -->
+<ng-template #ball>
+  <svg class="ball" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="10.5" fill="#ffffff"/>
+    <path d="M12 12 Q14.5 6.5 12 1.5 A10.5 10.5 0 0 1 21.1 17.25 Q16.5 13.5 12 12Z" fill="#ffd400"/>
+    <path d="M12 12 Q16.5 13.5 21.1 17.25 A10.5 10.5 0 0 1 2.9 17.25 Q7.5 13.5 12 12Z" fill="#1d4ed8"/>
+    <circle cx="12" cy="12" r="10.5" fill="none" stroke="#0f172a" stroke-width="1.3"/>
+  </svg>
+</ng-template>

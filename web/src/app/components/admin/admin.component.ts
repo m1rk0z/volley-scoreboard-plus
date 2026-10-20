@@ -248,6 +248,20 @@ export class AdminComponent implements OnInit, OnDestroy {
     );
   }
 
+  swapSides(): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.scoreboardService.swapSides().subscribe(
+      ignored => {
+        this.disabled = false;
+      },
+      error => {
+        this.alertService.showError(error);
+        this.disabled = false;
+      }
+    );
+  }
+
   switchBallOwner(): void {
     if (this.scoreboard == null) { return; }
     const teamBallOwner: TeamBallOwner = this.scoreboard.getTeamBallOwner();

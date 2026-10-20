@@ -46,5 +46,6 @@ func NewScoreboardPrefs() *api.ScoreboardPrefs {
 		AwayName:       "AWAY",
 		AwayBg:         "#20C0F0",
 		AwayFg:         "#EEFF88",
+		Layout:         "broadcast",
 	}
 }

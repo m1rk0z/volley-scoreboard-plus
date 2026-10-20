@@ -7,6 +7,7 @@ import { ScoreboardService } from '../../services/scoreboard.service';
 import { AlertService } from '../../services/alert.service';
 
 import Swal from 'sweetalert2';
+import * as scoreboardStyles from '../../../assets/scoreboard-styles.json';
 
 @Component({
   selector: 'app-preferences',
@@ -26,62 +27,9 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
   disabled = false;
   previewed = false;
 
-  themes = [
-    {
-      label: 'FIPAV (Blu & Oro)',
-      bg: '#070c16', fg: '#ffffff',
-      homeBg: '#004bbb', homeFg: '#ffffff',
-      awayBg: '#f59e0b', awayFg: '#070c16',
-      setBg: '#0e1a2e', setFg: '#ffffff',
-      pointBg: '#0e1a2e', pointFg: '#ffffff',
-      timeoutBg: '#ff3b30', videoCheckBg: '#ff3b30'
-    },
-    {
-      label: 'Superlega Derby (Rosso & Blu)',
-      bg: '#0b0e14', fg: '#ffffff',
-      homeBg: '#c51d24', homeFg: '#ffffff',
-      awayBg: '#1d4ed8', awayFg: '#ffffff',
-      setBg: '#131923', setFg: '#ffffff',
-      pointBg: '#131923', pointFg: '#ffffff',
-      timeoutBg: '#ff3b30', videoCheckBg: '#ff3b30'
-    },
-    {
-      label: 'Smeraldo & Oro',
-      bg: '#061210', fg: '#ffffff',
-      homeBg: '#059669', homeFg: '#ffffff',
-      awayBg: '#d97706', awayFg: '#ffffff',
-      setBg: '#0b201b', setFg: '#ffffff',
-      pointBg: '#0b201b', pointFg: '#ffffff',
-      timeoutBg: '#ef4444', videoCheckBg: '#ef4444'
-    },
-    {
-      label: 'Showdown Night (Viola & Giallo)',
-      bg: '#0b0716', fg: '#ffffff',
-      homeBg: '#7c3aed', homeFg: '#ffffff',
-      awayBg: '#eab308', awayFg: '#0b0716',
-      setBg: '#151025', setFg: '#ffffff',
-      pointBg: '#151025', pointFg: '#ffffff',
-      timeoutBg: '#f43f5e', videoCheckBg: '#f43f5e'
-    },
-    {
-      label: 'Azzurri Italia (Azzurro & Rosso)',
-      bg: '#060f1c', fg: '#ffffff',
-      homeBg: '#0055b8', homeFg: '#ffffff',
-      awayBg: '#dc2626', awayFg: '#ffffff',
-      setBg: '#0d192c', setFg: '#ffffff',
-      pointBg: '#0d192c', pointFg: '#ffffff',
-      timeoutBg: '#ff3b30', videoCheckBg: '#ff3b30'
-    },
-    {
-      label: 'OLED Stealth (Nero, Ciano & Rubino)',
-      bg: '#000000', fg: '#ffffff',
-      homeBg: '#0284c7', homeFg: '#ffffff',
-      awayBg: '#e11d48', awayFg: '#ffffff',
-      setBg: '#11141c', setFg: '#ffffff',
-      pointBg: '#11141c', pointFg: '#ffffff',
-      timeoutBg: '#f59e0b', videoCheckBg: '#f59e0b'
-    }
-  ];
+  // Layout e temi: unica fonte condivisa con i tasti del Totem (hub /api/key)
+  layouts = scoreboardStyles.layouts;
+  themes = scoreboardStyles.themes;
 
   applyTheme(theme: any): void {
     this.formGroup.patchValue({
@@ -96,7 +44,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
       pointBg: theme.pointBg,
       pointFg: theme.pointFg,
       timeoutBg: theme.timeoutBg,
-      videoCheckBg: theme.videoCheckBg
+      videoCheckBg: theme.videoCheckBg || theme.timeoutBg
     });
   }
 
@@ -109,6 +57,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
+      layout: new FormControl('broadcast'),
       showHeader: new FormControl(null, Validators.required),
       bg: new FormControl(null, Validators.required),
       fg: new FormControl(null, Validators.required),
@@ -130,6 +79,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
     });
 
     this.formGroup.valueChanges.subscribe((formValue: any) => {
+      this.formData.layout = formValue.layout;
       this.formData.showHeader = formValue.showHeader;
       this.formData.bg = formValue.bg;
       this.formData.fg = formValue.fg;
@@ -153,6 +103,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
 
   ngAfterViewInit(): void {
     this.formGroup.patchValue({
+      layout: this.formData.layout || 'broadcast',
       showHeader: this.formData.showHeader,
       bg: this.formData.bg,
       fg: this.formData.fg,

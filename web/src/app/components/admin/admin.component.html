@@ -61,7 +61,8 @@
           (homeVideoCheckTap)="addHomeVideoCheck()"
           (awayVideoCheckTap)="addAwayVideoCheck()"
           (homeNameSwipeLeft)="funnyAnim(true)"
-          (homeNameSwipeRight)="funnyAnim(false)">
+          (homeNameSwipeRight)="funnyAnim(false)"
+          (nameTap)="swapSides()">
           </app-scoreboard>
         </div>
         <div *ngIf="!hideControls" class="d-flex flex-column w-10">

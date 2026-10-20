@@ -1,0 +1,38 @@
+{
+  "layouts": [
+    { "id": "broadcast", "label": "Broadcast" },
+    { "id": "blocks", "label": "Blocchi squadra" },
+    { "id": "arena", "label": "Arena" },
+    { "id": "split", "label": "Metà campo" },
+    { "id": "classic", "label": "Classico" }
+  ],
+  "themes": [
+    { "label": "Notte Palasport",
+      "bg": "#0b0d10", "fg": "#e8eaed", "pointBg": "#161a20", "pointFg": "#ffffff", "setBg": "#232932", "setFg": "#ffffff",
+      "homeBg": "#2563eb", "homeFg": "#ffffff", "awayBg": "#f97316", "awayFg": "#111111", "timeoutBg": "#facc15" },
+    { "label": "LED Classico",
+      "bg": "#000000", "fg": "#d6d6d6", "pointBg": "#0b0b0b", "pointFg": "#ffb000", "setBg": "#161616", "setFg": "#ff4d3d",
+      "homeBg": "#c81e1e", "homeFg": "#ffffff", "awayBg": "#1d4ed8", "awayFg": "#ffffff", "timeoutBg": "#ffb000" },
+    { "label": "Bianco Gara",
+      "bg": "#e9edf2", "fg": "#0f172a", "pointBg": "#ffffff", "pointFg": "#0f172a", "setBg": "#0f172a", "setFg": "#ffffff",
+      "homeBg": "#0b3d91", "homeFg": "#ffffff", "awayBg": "#c8102e", "awayFg": "#ffffff", "timeoutBg": "#f59e0b" },
+    { "label": "Contrasto Massimo",
+      "bg": "#000000", "fg": "#ffffff", "pointBg": "#0f0f0f", "pointFg": "#ffffff", "setBg": "#ffffff", "setFg": "#000000",
+      "homeBg": "#ffd400", "homeFg": "#000000", "awayBg": "#00b3ff", "awayFg": "#000000", "timeoutBg": "#ffffff" },
+    { "label": "Ardesia e Corallo",
+      "bg": "#111827", "fg": "#e5e7eb", "pointBg": "#1f2937", "pointFg": "#f9fafb", "setBg": "#2b3a52", "setFg": "#f9fafb",
+      "homeBg": "#14b8a6", "homeFg": "#042f2e", "awayBg": "#fb7185", "awayFg": "#3f0a14", "timeoutBg": "#fbbf24" },
+    { "label": "Tricolore",
+      "bg": "#06101f", "fg": "#e6ecf5", "pointBg": "#0c1b33", "pointFg": "#ffffff", "setBg": "#ffffff", "setFg": "#06101f",
+      "homeBg": "#009246", "homeFg": "#ffffff", "awayBg": "#ce2b37", "awayFg": "#ffffff", "timeoutBg": "#ffffff" },
+    { "label": "Superlega Oro",
+      "bg": "#070b18", "fg": "#e8e2cf", "pointBg": "#0f1630", "pointFg": "#ffffff", "setBg": "#1a2346", "setFg": "#f5d77a",
+      "homeBg": "#1e40af", "homeFg": "#ffffff", "awayBg": "#b91c1c", "awayFg": "#ffffff", "timeoutBg": "#d4af37" },
+    { "label": "Volt Neon",
+      "bg": "#050505", "fg": "#d9d9d9", "pointBg": "#111111", "pointFg": "#e6ff3a", "setBg": "#1c1c1c", "setFg": "#e6ff3a",
+      "homeBg": "#8b5cf6", "homeFg": "#ffffff", "awayBg": "#06b6d4", "awayFg": "#04141a", "timeoutBg": "#e6ff3a" },
+    { "label": "Parquet",
+      "bg": "#1a120b", "fg": "#f3e6d3", "pointBg": "#2a1d12", "pointFg": "#fff4e0", "setBg": "#3d2a18", "setFg": "#fff4e0",
+      "homeBg": "#e07a1f", "homeFg": "#1a120b", "awayBg": "#2f80c9", "awayFg": "#ffffff", "timeoutBg": "#f2c14e" }
+  ]
+}

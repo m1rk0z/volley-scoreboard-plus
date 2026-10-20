@@ -463,6 +463,11 @@ components:
           type: integer
           description: Video checks.
           default: 0
+        setScores:
+          type: array
+          description: Points scored in each finished set (partials).
+          items:
+            type: integer
       required:
         - points
         - sets
@@ -510,6 +515,10 @@ components:
           format: color
           description: Foreground scoreboard color.
           default: "#FFFFFF"
+        layout:
+          type: string
+          description: Scoreboard layout.
+          enum: [classic, broadcast, blocks, arena, split]
         showHeader:
           type: boolean
           description: Show scoreboard header with logo.

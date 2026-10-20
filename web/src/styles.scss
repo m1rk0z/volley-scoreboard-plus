@@ -61,3 +61,8 @@ html {
 .h-90 {
   height: 90% !important
 }
+
+// Barlow Condensed (SIL Open Font License, assets/fonts/OFL.txt): inclusa per funzionare senza internet
+@font-face { font-family: "Barlow Condensed"; font-weight: 600; font-display: block; src: url("assets/fonts/barlow-condensed-600.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 700; font-display: block; src: url("assets/fonts/barlow-condensed-700.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 800; font-display: block; src: url("assets/fonts/barlow-condensed-800.woff2") format("woff2"); }

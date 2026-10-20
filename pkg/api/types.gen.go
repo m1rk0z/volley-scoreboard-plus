@@ -45,6 +45,7 @@ type ScoreboardPrefs struct {
 	HomeBg         string `json:"homeBg"`
 	HomeFg         string `json:"homeFg"`
 	HomeName       string `json:"homeName"`
+	Layout         string `json:"layout,omitempty"`
 	PointBg        string `json:"pointBg"`
 	PointFg        string `json:"pointFg"`
 	SetBg          string `json:"setBg"`
@@ -67,10 +68,11 @@ type ScoreboardStatus struct {
 
 // ScoreboardTeamStatus defines model for ScoreboardTeamStatus.
 type ScoreboardTeamStatus struct {
-	Points      int `json:"points"`
-	Sets        int `json:"sets"`
-	Timeouts    int `json:"timeouts"`
-	VideoChecks int `json:"videoChecks"`
+	Points      int   `json:"points"`
+	SetScores   []int `json:"setScores,omitempty"`
+	Sets        int   `json:"sets"`
+	Timeouts    int   `json:"timeouts"`
+	VideoChecks int   `json:"videoChecks"`
 }
 
 // Session defines model for Session.

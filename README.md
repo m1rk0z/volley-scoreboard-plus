@@ -75,16 +75,14 @@ Durante il cambio campo a fine set o al tie-break al cambio a 8 punti, è possib
 - Le cornici e i riempimenti dei timeout assumono in tempo reale il **colore identificativo della squadra** corrispondente.
 - Il modulo Video Check è stato completamente rimosso dall'interfaccia di gara, permettendo al box timeout di espandersi al 100% dell'altezza disponibile.
 
-### 4. Palette Temi Preimpostati Arena (1-Click)
-Nella finestra **Preferenze**, è presente una barra di selezione rapida con 6 palette grafiche professionali ad alto contrasto:
-1. **FIPAV (Blu Notte & Oro):** Stile federale classico italiano.
-2. **Superlega Derby (Rosso Rubino & Blu Reale):** Palette ad alto impatto per grandi sfide.
-3. **Palasport Smeraldo (Verde Smeraldo & Oro):** Toni eleganti su fondo verde profondo.
-4. **Showdown Night (Viola Elettrico & Giallo Volt):** Stile evento serale ad alta visibilità.
-5. **Azzurri Italia (Azzurro & Rosso Corsa):** Grafica da broadcast televisivo.
-6. **Arena OLED Stealth (Nero Assoluto, Ciano & Rubino):** Fondo nero puro `#000000` con pixel spenti per schermi OLED.
+### 4. Layout e Temi (1-Click)
+Nella finestra **Preferenze** si sceglie il **layout** del tabellone e si applica un **tema** con un clic. Layout e temi sono definiti in un unico file, `web/src/assets/scoreboard-styles.json`.
 
-Tutti i temi presentano pannelli punteggio uniformi (`pointBg` e `setBg` coordinati) e cifre in bianco puro (`#ffffff`) per la massima leggibilità anche dal fondo del palazzetto.
+**Layout:** Broadcast (predefinito), Blocchi squadra, Arena, Metà campo, Classico.
+
+**Temi:** Notte Palasport, LED Classico, Bianco Gara, Contrasto Massimo, Ardesia e Corallo, Tricolore, Superlega Oro, Volt Neon, Parquet.
+
+I layout moderni mostrano anche i **parziali dei set**, il **timer di 30"** quando viene chiamato un timeout, gli avvisi **SET POINT / MATCH POINT** e **CAMBIO CAMPO** (a 8 punti del tie-break) e il pallone accanto alla squadra al servizio. Il font Barlow Condensed (SIL OFL) è incluso, così il tabellone funziona anche senza internet.
 
 ### 5. Accesso 0-Click & Tolleranza Errori JWT
 - **Auto-Login:** Aprendo `/admin` da tablet o smartphone, il form esegue l'accesso automatico senza richiedere l'inserimento manuale delle credenziali.

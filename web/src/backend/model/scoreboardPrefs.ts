@@ -25,6 +25,10 @@ export interface ScoreboardPrefs {
      */
     showHeader: boolean;
     /**
+     * Scoreboard layout: classic, broadcast, blocks, arena, split.
+     */
+    layout?: string;
+    /**
      * Set label text.
      */
     setName: string;

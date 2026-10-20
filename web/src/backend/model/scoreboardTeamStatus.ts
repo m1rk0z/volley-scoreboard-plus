@@ -28,5 +28,9 @@ export interface ScoreboardTeamStatus {
      * Video checks.
      */
     videoChecks: number;
+    /**
+     * Points scored in each finished set (partials).
+     */
+    setScores?: Array<number>;
 }
 

@@ -349,3 +349,214 @@
   animation-delay: 2000ms;
   position: absolute;
 }
+
+// ================= Layout moderni (broadcast, blocks, arena, split) =================
+// --u = 1% dell'altezza del riquadro 16:9 che entra nel tabellone (calcolato nel componente)
+@function u($n) {
+  @return unquote("calc(var(--u, 1vh) * #{$n})");
+}
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bx {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  text-align: left;
+  user-select: none;
+
+  > .in {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: u(177.78);
+    height: u(100);
+    transform: translate(-50%, -50%);
+    display: grid;
+    grid-template-rows: 12% 1fr 18%;
+    padding: u(3) u(5.3);
+    grid-gap: u(2.5);
+  }
+
+  .top {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: 100%;
+    min-height: 0;
+    align-items: center;
+    grid-gap: u(3.5);
+    font-size: u(5.5);
+    font-weight: 600;
+    letter-spacing: u(0.3);
+  }
+  .club {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+    img { height: u(10); max-width: 100%; object-fit: contain; object-position: left center; }
+  }
+  .chip {
+    background: var(--sb);
+    color: var(--sf);
+    padding: u(0.4) u(2.8);
+    border-radius: 999px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .badge-slot { display: flex; justify-content: flex-end; min-width: 0; }
+  .badge {
+    background: var(--ac);
+    color: var(--acf);
+    padding: u(0.4) u(2.2);
+    border-radius: u(1);
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pulse { animation: sb-pulse 0.7s ease-in-out infinite alternate; }
+
+  .mid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-gap: u(4.4);
+    min-height: 0;
+  }
+  .team { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  .team.home { --c: var(--hb); --cf: var(--hf); --c-dark: var(--hb-dark); --c-glow: var(--hb-glow); }
+  .team.away { --c: var(--ab); --cf: var(--af); --c-dark: var(--ab-dark); --c-glow: var(--ab-glow); }
+  .nm {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: u(7.5);
+    line-height: 1.1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    min-width: 0;
+    span { overflow: hidden; text-overflow: ellipsis; }
+  }
+  .ball { width: u(5.6); height: u(5.6); flex: none; margin-right: u(1.6); }
+  .team:not(.serving) .ball { display: none; }
+  .score {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--pf);
+    font-weight: 800;
+    font-size: u(44);
+    line-height: 0.8;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: u(-0.4);
+  }
+  .sets {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 u(1.8);
+    .n { font-weight: 800; font-size: u(19); line-height: 0.9; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .l { opacity: 0.6; font-size: u(4.8); font-weight: 600; letter-spacing: u(0.5); margin-top: u(0.6); }
+  }
+
+  .bot {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    grid-gap: u(3.5);
+  }
+  .tos {
+    display: flex;
+    align-items: center;
+    &.home { --c: var(--hb); --c-glow: var(--hb-glow); }
+    &.away { --c: var(--ab); --c-glow: var(--ab-glow); justify-content: flex-end; }
+    i {
+      width: u(9);
+      height: u(3.4);
+      margin: 0 u(0.7);
+      border-radius: 999px;
+      border: u(0.5) solid var(--c);
+      opacity: 0.85;
+    }
+    i.on { background: var(--c); opacity: 1; box-shadow: 0 0 u(2) var(--c-glow); }
+    em { font-style: normal; opacity: 0.6; font-size: u(4.8); font-weight: 600; letter-spacing: u(0.3); margin: 0 u(0.7); }
+  }
+  .partials {
+    display: flex;
+    span {
+      background: var(--sb);
+      color: var(--sf);
+      border-radius: u(1);
+      padding: u(0.5) u(1.8);
+      margin: 0 u(0.6);
+      font-weight: 700;
+      font-size: u(5.5);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .lo { opacity: 0.5; }
+  }
+  .timer {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    background: var(--ac);
+    color: var(--acf);
+    border-radius: u(1.4);
+    padding: u(0.6) u(2.6);
+    font-weight: 800;
+    .w { font-size: u(4.6); letter-spacing: u(0.3); margin-right: u(2.4); white-space: nowrap; }
+    .t { font-size: u(9); line-height: 1; font-variant-numeric: tabular-nums; }
+    .bar { position: absolute; left: 0; bottom: 0; height: u(0.8); background: var(--acf); opacity: 0.4; transition: width 1s linear; }
+    &.warn { animation: sb-pulse 0.4s ease-in-out infinite alternate; }
+  }
+
+  // A · Broadcast: pannelli con striscia nel colore squadra
+  &.v-broadcast {
+    .team { background: var(--pb); border-radius: u(2); overflow: hidden; border-top: u(1.6) solid var(--c); }
+    .nm { padding: u(1.4) u(3) 0; }
+    .team.away .nm { justify-content: flex-end; }
+  }
+
+  // B · Blocchi squadra: pannelli pieni nel colore squadra
+  &.v-blocks {
+    .team { background: linear-gradient(160deg, var(--c), var(--c-dark)); color: var(--cf); border-radius: u(2); overflow: hidden; }
+    .nm { padding: u(1.4) u(3) 0; opacity: 0.92; }
+    .team.away .nm { justify-content: flex-end; }
+    .score { color: var(--cf); }
+    .sets { background: var(--pb); border-radius: u(2); padding: 0 u(4.2); }
+  }
+
+  // C · Arena: niente pannelli, cifre direttamente sullo sfondo
+  &.v-arena {
+    .team { align-items: center; }
+    .nm { padding-bottom: u(1); border-bottom: u(1) solid var(--c); max-width: 100%; }
+    .score { font-size: u(50); }
+    .sets { border-left: u(0.4) solid var(--line); border-right: u(0.4) solid var(--line); padding: 0 u(5.3); }
+  }
+
+  // D · Metà campo: sfondo diviso nei colori delle squadre
+  &.v-split {
+    background: linear-gradient(90deg, var(--hb-tint) 0%, var(--bg) 47%, var(--bg) 53%, var(--ab-tint) 100%);
+    .team { align-items: center; }
+    .nm { font-size: u(8.5); }
+    .score { font-size: u(50); text-shadow: 0 u(0.6) u(3) rgba(0, 0, 0, 0.28); }
+    .sets { background: var(--pb); border-radius: u(2); padding: 0 u(4.6); box-shadow: 0 u(1) u(4) rgba(0, 0, 0, 0.3); }
+  }
+}
+
+@keyframes sb-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.45; }
+}

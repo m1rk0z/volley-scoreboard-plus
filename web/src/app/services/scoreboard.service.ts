@@ -10,6 +10,7 @@ import { WebSocketService } from './websocket.service';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class ScoreboardService {
@@ -28,6 +29,9 @@ export class ScoreboardService {
   private readonly session = new BehaviorSubject<Session>(null);
 
   private readonly command = new Subject<ScoreboardCommand>();
+
+  // true once the first real status has arrived from the server (the initial value is a placeholder)
+  statusLoaded = false;
 
   // Expose the observable$ part
   readonly status$ = this.status.asObservable();
@@ -50,7 +54,8 @@ export class ScoreboardService {
   constructor(private webSocketService: WebSocketService,
               private defaultService: DefaultService,
               private sessionService: SessionService,
-              private hotkeysService: HotkeysService) {
+              private hotkeysService: HotkeysService,
+              private http: HttpClient) {
 
     let basePath = environment.API_BASE_PATH;
     if (!basePath) {
@@ -75,6 +80,7 @@ export class ScoreboardService {
     this.webSocketService.connect().subscribe({
       next: (message: ScoreboardMessage) => {
         if (message.status) {
+          this.statusLoaded = true;
           this.status.next(message.status);
         }
         if (message.prefs) {
@@ -137,6 +143,12 @@ export class ScoreboardService {
   newSet(showWinner: boolean = false): Observable<ScoreboardStatus> {
     const status = this.getStatus();
 
+    // Partials: keep the points of each finished set
+    if (status.home.points > 0 || status.away.points > 0) {
+      status.home.setScores = (status.home.setScores || []).concat(status.home.points);
+      status.away.setScores = (status.away.setScores || []).concat(status.away.points);
+    }
+
     if (status.home.points > status.away.points) {
       status.home.sets++;
     } else if (status.away.points > status.home.points) {
@@ -152,6 +164,11 @@ export class ScoreboardService {
     status.showWinner = showWinner;
 
     return this.defaultService.scoreboardStatusPut(status);
+  }
+
+  // Side swap (teams, points, sets, timeouts, partials, colors): POST /scoreboard/swap
+  swapSides(): Observable<any> {
+    return this.http.post(`${this.defaultService.configuration.basePath}/scoreboard/swap`, null);
   }
 
   addHomePoints(points = 1): Observable<ScoreboardStatus> {

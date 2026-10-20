@@ -17,6 +17,13 @@
   </div>
 
   <form nz-form [formGroup]="formGroup" name="preferences">
+    <!-- LAYOUT DEL TABELLONE -->
+    <div style="margin-bottom: 14px;">
+      <div style="font-weight: 700; font-size: 13px; margin-bottom: 8px;">🖥️ Layout del tabellone:</div>
+      <nz-radio-group formControlName="layout" nzButtonStyle="solid">
+        <label *ngFor="let l of layouts" nz-radio-button [nzValue]="l.id">{{l.label}}</label>
+      </nz-radio-group>
+    </div>
     <div nz-row [nzGutter]="12">
 
       <!-- show header with logo, bg and fg -->
