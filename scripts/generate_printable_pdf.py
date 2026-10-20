@@ -17,13 +17,13 @@ if not os.path.exists(SECRETS_PATH):
 with open(SECRETS_PATH, encoding="utf-8") as f:
     S = json.load(f)
 
-# QR Code Wi-Fi della rete del Totem (modem), generato dai valori locali
+# QR Code Wi-Fi della rete principale (FRITZ!Box), generato dai valori locali
 qr_b64 = ""
 try:
     import io
     import qrcode
     buf = io.BytesIO()
-    qrcode.make(f"WIFI:T:WPA;S:{S['backup_ssid']};P:{S['backup_password']};;", box_size=8, border=1).save(buf, format="PNG")
+    qrcode.make(f"WIFI:T:WPA;S:{S['wifi_ssid']};P:{S['wifi_password']};;", box_size=8, border=1).save(buf, format="PNG")
     qr_b64 = base64.b64encode(buf.getvalue()).decode("ascii")
 except ImportError:
     if os.path.exists(QR_PATH):
@@ -274,7 +274,7 @@ html_content = f"""<!DOCTYPE html>
     <div class="badge-row">
       <span class="badge">Palasport DDN</span>
       <span class="badge">Raspberry Pi 5</span>
-      <span class="badge">Modem 5G</span>
+      <span class="badge">FRITZ!Box + Modem 5G</span>
       <span class="badge">FIPAV / Superlega Grade</span>
     </div>
   </div>
@@ -285,7 +285,7 @@ html_content = f"""<!DOCTYPE html>
     
     <div class="wifi-flex">
       <div style="flex-grow: 1;">
-        <p>Connettere lo smartphone o il tablet alla <strong>stessa rete Wi-Fi del Totem</strong> per gestire il segnapunti:</p>
+        <p>Connettere lo smartphone o il tablet a <strong>una delle due reti</strong>: il FRITZ!Box fa da ponte del modem, quindi sono <strong>la stessa rete</strong> del Totem (consigliata Segnapunti, copertura migliore).</p>
         <table>
           <thead>
             <tr>
@@ -297,16 +297,16 @@ html_content = f"""<!DOCTYPE html>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Modem 5G (Rete del Totem)</strong></td>
-              <td><strong style="color:#0055b8; font-size:10.5pt;">{S["backup_ssid"]}</strong></td>
-              <td><code style="font-size:10pt; font-weight:bold;">{S["backup_password"]}</code></td>
-              <td>Totem: <code>{S["pi_ip"]}</code> (fisso) • Gateway: <code>{S["backup_gateway"]}</code></td>
+              <td><strong>FRITZ!Box (Rete principale)</strong></td>
+              <td><strong style="color:#0055b8; font-size:10.5pt;">{S["wifi_ssid"]}</strong></td>
+              <td><code style="font-size:10pt; font-weight:bold;">{S["wifi_password"]}</code></td>
+              <td>Ponte del modem • Totem collegato via cavo: <code>{S["pi_ip"]}</code> (fisso)</td>
             </tr>
             <tr>
-              <td><strong>FRITZ!Box (Collegamento a distanza)</strong></td>
-              <td><strong style="color:#0055b8;">{S["wifi_ssid"]}</strong></td>
-              <td><code>{S["wifi_password"]}</code></td>
-              <td>2.4 / 5 GHz</td>
+              <td><strong>Modem 5G</strong></td>
+              <td><strong style="color:#0055b8;">{S["backup_ssid"]}</strong></td>
+              <td><code>{S["backup_password"]}</code></td>
+              <td>Stessa rete • Gateway: <code>{S["backup_gateway"]}</code></td>
             </tr>
           </tbody>
         </table>
@@ -499,6 +499,11 @@ html_content = f"""<!DOCTYPE html>
           <td>Premere <span class="key-badge">F11</span> sulla tastiera collegata al Raspberry Pi.</td>
         </tr>
         <tr>
+          <td><strong>Il Totem non risponde</strong></td>
+          <td>Cavo tra Totem e FRITZ!Box staccato, o FRITZ!Box spento</td>
+          <td>Ricollegare il cavo (senza cavo il Totem passa da solo al Wi-Fi del modem, stesso indirizzo).</td>
+        </tr>
+        <tr>
           <td><strong>Android non apre segnapunti.local</strong></td>
           <td>Alcuni Android non riconoscono i nomi <code>.local</code></td>
           <td>Usare l'indirizzo numerico <code>http://{S["pi_ip"]}</code></td>
@@ -508,17 +513,12 @@ html_content = f"""<!DOCTYPE html>
           <td>Il telefono è passato ai dati mobili (rete senza internet)</td>
           <td>Spegnere i dati mobili oppure scegliere "Resta connesso" all'avviso di Android.</td>
         </tr>
-        <tr>
-          <td><strong>Riavvio del servizio via SSH</strong></td>
-          <td>Manutenzione rapida da terminale</td>
-          <td>Eseguire: <code>sudo systemctl restart scoreboard-plus.service</code></td>
-        </tr>
       </tbody>
     </table>
   </div>
 
   <div class="footer-note">
-    Documento redatto per ASD Multisports DDN • Volley Scoreboard Plus su Raspberry Pi 5 • Modem 5G • Repository: github.com/m1rk0z/volley-scoreboard-plus
+    Documento redatto per ASD Multisports DDN • Volley Scoreboard Plus su Raspberry Pi 5 • FRITZ!Box 7530 + Modem 5G • Repository: github.com/m1rk0z/volley-scoreboard-plus
   </div>
 
 </body>
