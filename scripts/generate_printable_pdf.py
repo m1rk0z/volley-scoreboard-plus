@@ -13,15 +13,22 @@ QR_PATH = r"c:\Users\mcominardi\Desktop\Progetti\Rasberry-pi 5\scripts\wifi_qr.p
 # Valori di rete e password: file locale fuori dal repository (vedi README)
 SECRETS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "totem_secrets.json")
 if not os.path.exists(SECRETS_PATH):
-    sys.exit("Manca " + os.path.abspath(SECRETS_PATH) + " (wifi_ssid, wifi_password, gateway, backup_ssid, backup_password, pi_ip, camera_rtsp)")
+    sys.exit("Manca " + os.path.abspath(SECRETS_PATH) + " (wifi_ssid, wifi_password, gateway, backup_ssid, backup_password, backup_gateway, pi_ip, camera_rtsp)")
 with open(SECRETS_PATH, encoding="utf-8") as f:
     S = json.load(f)
 
-# Read QR Code in base64
+# QR Code Wi-Fi della rete del Totem (modem), generato dai valori locali
 qr_b64 = ""
-if os.path.exists(QR_PATH):
-    with open(QR_PATH, "rb") as f:
-        qr_b64 = base64.b64encode(f.read()).decode("ascii")
+try:
+    import io
+    import qrcode
+    buf = io.BytesIO()
+    qrcode.make(f"WIFI:T:WPA;S:{S['backup_ssid']};P:{S['backup_password']};;", box_size=8, border=1).save(buf, format="PNG")
+    qr_b64 = base64.b64encode(buf.getvalue()).decode("ascii")
+except ImportError:
+    if os.path.exists(QR_PATH):
+        with open(QR_PATH, "rb") as f:
+            qr_b64 = base64.b64encode(f.read()).decode("ascii")
 
 html_content = f"""<!DOCTYPE html>
 <html lang="it">
@@ -248,6 +255,14 @@ html_content = f"""<!DOCTYPE html>
     li {{
       margin-bottom: 2px;
     }}
+      h2 {{ break-after: avoid; page-break-after: avoid; }}
+    table.keys td {{ padding: 2px 6px; }}
+    .grid-3 {{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 10px;
+    }}
   </style>
 </head>
 <body>
@@ -259,18 +274,18 @@ html_content = f"""<!DOCTYPE html>
     <div class="badge-row">
       <span class="badge">Palasport DDN</span>
       <span class="badge">Raspberry Pi 5</span>
-      <span class="badge">FRITZ!Box 7530</span>
+      <span class="badge">Modem 5G</span>
       <span class="badge">FIPAV / Superlega Grade</span>
     </div>
   </div>
 
   <!-- SEZIONE 1: RETE WI-FI E ACCESSO RAPIDO -->
   <div class="card highlight">
-    <h2>1. Rete Wi-Fi Palasport (FRITZ!Box 7530) & Accesso da Smartphone / Tablet</h2>
+    <h2>1. Rete Wi-Fi del Totem & Accesso da Smartphone / Tablet</h2>
     
     <div class="wifi-flex">
       <div style="flex-grow: 1;">
-        <p>Connettere lo smartphone o il tablet alla rete Wi-Fi del palazzetto per gestire il segnapunti:</p>
+        <p>Connettere lo smartphone o il tablet alla <strong>stessa rete Wi-Fi del Totem</strong> per gestire il segnapunti:</p>
         <table>
           <thead>
             <tr>
@@ -282,27 +297,27 @@ html_content = f"""<!DOCTYPE html>
           </thead>
           <tbody>
             <tr>
-              <td><strong>FRITZ!Box (Ufficiale)</strong></td>
-              <td><strong style="color:#0055b8; font-size:10.5pt;">{S["wifi_ssid"]}</strong></td>
-              <td><code style="font-size:10pt; font-weight:bold;">{S["wifi_password"]}</code></td>
-              <td>2.4 / 5 GHz • Gateway: <code>{S["gateway"]}</code></td>
+              <td><strong>Modem 5G (Rete del Totem)</strong></td>
+              <td><strong style="color:#0055b8; font-size:10.5pt;">{S["backup_ssid"]}</strong></td>
+              <td><code style="font-size:10pt; font-weight:bold;">{S["backup_password"]}</code></td>
+              <td>Totem: <code>{S["pi_ip"]}</code> (fisso) • Gateway: <code>{S["backup_gateway"]}</code></td>
             </tr>
             <tr>
-              <td><strong>Modem 4G (Riserva)</strong></td>
-              <td><strong style="color:#0055b8;">{S["backup_ssid"]}</strong></td>
-              <td><code>{S["backup_password"]}</code></td>
-              <td>Access Point portatile di backup</td>
+              <td><strong>FRITZ!Box (Collegamento a distanza)</strong></td>
+              <td><strong style="color:#0055b8;">{S["wifi_ssid"]}</strong></td>
+              <td><code>{S["wifi_password"]}</code></td>
+              <td>2.4 / 5 GHz</td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="wifi-qr-box">
-        <img src="data:image/png;base64,{qr_b64}" alt="QR Wi-Fi Segnapunti">
-        <span>Inquadra per connetterti</span>
+        <img src="data:image/png;base64,{qr_b64}" alt="QR Wi-Fi del Totem">
+        <span>Inquadra per connetterti al Totem</span>
       </div>
     </div>
 
-    <p style="margin-top:4px;">Una volta connessi al Wi-Fi, aprire Google Chrome o Safari all'indirizzo:</p>
+    <p style="margin-top:4px;">Una volta connessi al Wi-Fi, aprire Google Chrome o Safari all'indirizzo (se <code>segnapunti.local</code> non si apre, usare l'indirizzo numerico):</p>
     <table>
       <thead>
         <tr>
@@ -340,26 +355,35 @@ html_content = f"""<!DOCTYPE html>
 
   <div class="grid-2">
     <div class="card">
-      <h3>Controllo Touch / Mouse</h3>
+      <h3>Controllo Touch / Mouse (pannello admin)</h3>
       <ul>
-        <li><strong>Aggiungi Punto (+1):</strong> Tap/Click sul riquadro grande dei punti.</li>
-        <li><strong>Correggi Errore (-1):</strong> <em>Swipe verso il basso</em> sul riquadro dei punti.</li>
-        <li><strong>Assegnazione Servizio:</strong> Automatica a chi segna il punto (oppure tap sul pallino centrale del Set).</li>
-        <li><strong>Aggiungi Set (+1):</strong> Tap sul riquadro in basso dei set vinti.</li>
-        <li><strong>Timeout (1 o 2):</strong> Tap sui quadratini Timeout (si colorano col colore della squadra).</li>
+        <li><strong>Punto +1:</strong> tap sul numero grande dei punti.</li>
+        <li><strong>Correggi (-1):</strong> <em>swipe verso il basso</em> sul numero dei punti.</li>
+        <li><strong>Battuta:</strong> automatica a chi fa punto; tap sul riquadro centrale dei set per cambiarla.</li>
+        <li><strong>Set +1 / -1:</strong> swipe in alto / in basso sul numero dei set della squadra.</li>
+        <li><strong>Timeout:</strong> tap sulle pastiglie <em>T.O.</em> (parte il timer di 30" sulla TV).</li>
+        <li><strong>Inverti campo:</strong> tap sul nome di una squadra.</li>
       </ul>
     </div>
 
     <div class="card">
-      <h3>Scorciatoie da Tastiera</h3>
-      <ul>
-        <li><span class="key-badge">B</span> : <strong>Inversione Campo (Side Swap)</strong></li>
-        <li><span class="key-badge">S</span> : <strong>Nuovo Set</strong> (salva il parziale e azzera i punti)</li>
-        <li><span class="key-badge">M</span> : <strong>Nuova Partita</strong> (apre il modulo squadre)</li>
-        <li><span class="key-badge">1</span> / <span class="key-badge">2</span> : Punti Squadra Casa (+ / -)</li>
-        <li><span class="key-badge">9</span> / <span class="key-badge">0</span> : Punti Squadra Ospiti (+ / -)</li>
-        <li><span class="key-badge">3</span> / <span class="key-badge">7</span> : Timeout Casa / Ospiti</li>
-      </ul>
+      <h3>Tastiera del Totem (wireless)</h3>
+      <table class="keys">
+        <tbody>
+          <tr><td><span class="key-badge">1</span> / <span class="key-badge">2</span></td><td>Punto Casa +1 / -1</td></tr>
+          <tr><td><span class="key-badge">9</span> / <span class="key-badge">0</span></td><td>Punto Ospiti +1 / -1</td></tr>
+          <tr><td><span class="key-badge">3</span> / <span class="key-badge">4</span></td><td>Set Casa +1 / -1</td></tr>
+          <tr><td><span class="key-badge">7</span> / <span class="key-badge">8</span></td><td>Set Ospiti +1 / -1</td></tr>
+          <tr><td><span class="key-badge">Q</span> / <span class="key-badge">P</span></td><td>Timeout Casa / Ospiti</td></tr>
+          <tr><td><span class="key-badge">Spazio</span></td><td>Cambia battuta</td></tr>
+          <tr><td><span class="key-badge">B</span></td><td>Inverti campo</td></tr>
+          <tr><td><span class="key-badge">S</span> / <span class="key-badge">E</span> / <span class="key-badge">M</span></td><td>Nuovo set / Fine partita / Nuova partita (premere <strong>2 volte</strong>)</td></tr>
+          <tr><td><span class="key-badge">L</span> / <span class="key-badge">T</span></td><td>Layout / Tema successivo</td></tr>
+          <tr><td><span class="key-badge">F1</span> / <span class="key-badge">F2</span></td><td>Segnapunti / Video replay</td></tr>
+          <tr><td><span class="key-badge">H</span></td><td>Mostra la legenda dei tasti sulla TV</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:4px;">Funziona anche il tastierino numerico. Ogni comando compare per un attimo in basso sulla TV.</p>
     </div>
   </div>
 
@@ -374,70 +398,64 @@ html_content = f"""<!DOCTYPE html>
     </ol>
   </div>
 
-  <div class="page-break"></div>
+  <!-- SEZIONE 4: LAYOUT E TEMI -->
+  <h2>4. Layout e Temi del Tabellone</h2>
+  <p>Dal pannello admin, <strong>Preferenze</strong>: si sceglie il <strong>layout</strong> e si applica un <strong>tema</strong> con un clic. Dalla tastiera del Totem: <span class="key-badge">L</span> layout successivo, <span class="key-badge">T</span> tema successivo.</p>
+  <p><strong>Layout:</strong> Broadcast (predefinito) • Blocchi squadra • Arena • Metà campo • Classico. I layout nuovi mostrano anche i <strong>parziali dei set</strong>, il <strong>timer di 30"</strong> del timeout, gli avvisi <strong>SET POINT / MATCH POINT</strong> e <strong>CAMBIO CAMPO</strong> a 8 punti del tie-break.</p>
 
-  <!-- SEZIONE 4: TEMI ARENA PREIMPOSTATI -->
-  <h2>4. I 6 Temi Grafici Ufficiali (Selezione 1-Click in Preferenze)</h2>
-  <p>Cliccando sul pulsante <strong>Preferenze</strong> nel pannello admin, è possibile applicare all'istante una delle 6 palette grafiche omologate Superlega/FIPAV con cifre in bianco puro ad altissima visibilità:</p>
-
-  <div class="grid-2">
+  <div class="grid-3">
     <div class="theme-box">
-      <strong>1. FIPAV (Blu Notte & Oro)</strong>
-      <p>Stile federale classico italiano per gare ufficiali.</p>
+      <strong>1. Notte Palasport</strong>
       <div class="theme-color-dots">
-        Casa: <span class="dot" style="background:#004bbb;"></span> #004bbb |
-        Ospiti: <span class="dot" style="background:#f59e0b;"></span> #f59e0b |
-        Fondo: <span class="dot" style="background:#070c16;"></span>
+        Casa: <span class="dot" style="background:#2563eb;"></span> | Ospiti: <span class="dot" style="background:#f97316;"></span> | Fondo: <span class="dot" style="background:#0b0d10;"></span>
       </div>
     </div>
-
     <div class="theme-box">
-      <strong>2. Superlega Derby (Rosso & Blu)</strong>
-      <p>Ispirato ai grandi derby di Serie A (Lube, Perugia, Trento).</p>
+      <strong>2. LED Classico</strong>
       <div class="theme-color-dots">
-        Casa: <span class="dot" style="background:#c51d24;"></span> #c51d24 |
-        Ospiti: <span class="dot" style="background:#1d4ed8;"></span> #1d4ed8 |
-        Fondo: <span class="dot" style="background:#0b0e14;"></span>
+        Casa: <span class="dot" style="background:#c81e1e;"></span> | Ospiti: <span class="dot" style="background:#1d4ed8;"></span> | Fondo: <span class="dot" style="background:#000000;"></span>
       </div>
     </div>
-
     <div class="theme-box">
-      <strong>3. Smeraldo & Oro</strong>
-      <p>Tonalità elegante per società con colori sociali verde/oro.</p>
+      <strong>3. Bianco Gara</strong>
       <div class="theme-color-dots">
-        Casa: <span class="dot" style="background:#059669;"></span> #059669 |
-        Ospiti: <span class="dot" style="background:#d97706;"></span> #d97706 |
-        Fondo: <span class="dot" style="background:#061210;"></span>
+        Casa: <span class="dot" style="background:#0b3d91;"></span> | Ospiti: <span class="dot" style="background:#c8102e;"></span> | Fondo: <span class="dot" style="background:#e9edf2;"></span>
       </div>
     </div>
-
     <div class="theme-box">
-      <strong>4. Showdown Night (Viola & Giallo)</strong>
-      <p>Palette moderna ad alta carica per eventi e serali.</p>
+      <strong>4. Contrasto Massimo</strong>
       <div class="theme-color-dots">
-        Casa: <span class="dot" style="background:#7c3aed;"></span> #7c3aed |
-        Ospiti: <span class="dot" style="background:#eab308;"></span> #eab308 |
-        Fondo: <span class="dot" style="background:#0b0716;"></span>
+        Casa: <span class="dot" style="background:#ffd400;"></span> | Ospiti: <span class="dot" style="background:#00b3ff;"></span> | Fondo: <span class="dot" style="background:#000000;"></span>
       </div>
     </div>
-
     <div class="theme-box">
-      <strong>5. Azzurri Italia (Azzurro & Rosso)</strong>
-      <p>Grafica da diretta televisiva stile Nazionale Italiana.</p>
+      <strong>5. Ardesia e Corallo</strong>
       <div class="theme-color-dots">
-        Casa: <span class="dot" style="background:#0055b8;"></span> #0055b8 |
-        Ospiti: <span class="dot" style="background:#dc2626;"></span> #dc2626 |
-        Fondo: <span class="dot" style="background:#060f1c;"></span>
+        Casa: <span class="dot" style="background:#14b8a6;"></span> | Ospiti: <span class="dot" style="background:#fb7185;"></span> | Fondo: <span class="dot" style="background:#111827;"></span>
       </div>
     </div>
-
     <div class="theme-box">
-      <strong>6. OLED Stealth (Nero Assoluto)</strong>
-      <p>Nero puro per TV OLED (spegne i pixel e azzera riflessi).</p>
+      <strong>6. Tricolore</strong>
       <div class="theme-color-dots">
-        Casa: <span class="dot" style="background:#0284c7;"></span> #0284c7 |
-        Ospiti: <span class="dot" style="background:#e11d48;"></span> #e11d48 |
-        Fondo: <span class="dot" style="background:#000000;"></span>
+        Casa: <span class="dot" style="background:#009246;"></span> | Ospiti: <span class="dot" style="background:#ce2b37;"></span> | Fondo: <span class="dot" style="background:#06101f;"></span>
+      </div>
+    </div>
+    <div class="theme-box">
+      <strong>7. Superlega Oro</strong>
+      <div class="theme-color-dots">
+        Casa: <span class="dot" style="background:#1e40af;"></span> | Ospiti: <span class="dot" style="background:#b91c1c;"></span> | Fondo: <span class="dot" style="background:#070b18;"></span>
+      </div>
+    </div>
+    <div class="theme-box">
+      <strong>8. Volt Neon</strong>
+      <div class="theme-color-dots">
+        Casa: <span class="dot" style="background:#8b5cf6;"></span> | Ospiti: <span class="dot" style="background:#06b6d4;"></span> | Fondo: <span class="dot" style="background:#050505;"></span>
+      </div>
+    </div>
+    <div class="theme-box">
+      <strong>9. Parquet</strong>
+      <div class="theme-color-dots">
+        Casa: <span class="dot" style="background:#e07a1f;"></span> | Ospiti: <span class="dot" style="background:#2f80c9;"></span> | Fondo: <span class="dot" style="background:#1a120b;"></span>
       </div>
     </div>
   </div>
@@ -481,6 +499,16 @@ html_content = f"""<!DOCTYPE html>
           <td>Premere <span class="key-badge">F11</span> sulla tastiera collegata al Raspberry Pi.</td>
         </tr>
         <tr>
+          <td><strong>Android non apre segnapunti.local</strong></td>
+          <td>Alcuni Android non riconoscono i nomi <code>.local</code></td>
+          <td>Usare l'indirizzo numerico <code>http://{S["pi_ip"]}</code></td>
+        </tr>
+        <tr>
+          <td><strong>Il telefono non trova il Totem</strong></td>
+          <td>Il telefono è passato ai dati mobili (rete senza internet)</td>
+          <td>Spegnere i dati mobili oppure scegliere "Resta connesso" all'avviso di Android.</td>
+        </tr>
+        <tr>
           <td><strong>Riavvio del servizio via SSH</strong></td>
           <td>Manutenzione rapida da terminale</td>
           <td>Eseguire: <code>sudo systemctl restart scoreboard-plus.service</code></td>
@@ -490,16 +518,19 @@ html_content = f"""<!DOCTYPE html>
   </div>
 
   <div class="footer-note">
-    Documento redatto per ASD Multisports DDN • Volley Scoreboard Plus su Raspberry Pi 5 • FRITZ!Box 7530 • Repository: github.com/m1rk0z/volley-scoreboard-plus
+    Documento redatto per ASD Multisports DDN • Volley Scoreboard Plus su Raspberry Pi 5 • Modem 5G • Repository: github.com/m1rk0z/volley-scoreboard-plus
   </div>
 
 </body>
 </html>
 """
 
-print("Rendering printable PDF with official FRITZ!Box Segnapunti QR Code...")
+print("Rendering printable PDF...")
 with sync_playwright() as p:
-    browser = p.chromium.launch(channel="chrome")
+    try:
+        browser = p.chromium.launch(channel="chrome")
+    except Exception:
+        browser = p.chromium.launch(channel="msedge")
     page = browser.new_page()
     page.set_content(html_content, wait_until="networkidle")
     
