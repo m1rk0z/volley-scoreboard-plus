@@ -11,6 +11,7 @@ type ParticleOptions = {
   isRocket?: boolean,
   hue?: number,
   brightness?: number,
+  scale?: number,
 }
 
 export default class Particle {
@@ -27,15 +28,19 @@ export default class Particle {
   private alpha: number
   private hue: number
   private brightness: number
+  // size of the effect: 1 = original sizes, more for big screens seen from far away
+  private scale: number
 
   constructor ({
     isRocket = false,
     hue = random(1, 360),
     brightness = random(50, 60),
+    scale = 1,
     position
   }: ParticleOptions) {
 
     this.isRocket = isRocket
+    this.scale = scale
     this.position = position
     this.positions = [
       this.position,
@@ -45,14 +50,14 @@ export default class Particle {
 
     if (this.isRocket) {
       this.velocity = {
-        x: random(-3, 3),
-        y: random(-7, -3)
+        x: random(-3, 3) * scale,
+        y: random(-7, -3) * scale
       }
       this.shrink = 0.999
       this.resistance = 1
     } else {
       const angle = random(0, TAU)
-      const speed = Math.cos(random(0, TAU)) * 15
+      const speed = Math.cos(random(0, TAU)) * 15 * scale
       this.velocity = {
         x: Math.cos(angle) * speed,
         y: Math.sin(angle) * speed
@@ -61,8 +66,8 @@ export default class Particle {
       this.resistance = 0.92
     }
 
-    this.gravity = 0.01
-    this.size = 3
+    this.gravity = 0.01 * scale
+    this.size = 3 * scale
     this.alpha = 1
     this.fade = 0
     this.hue = hue
@@ -80,7 +85,8 @@ export default class Particle {
         y: this.position.y
       },
       hue: this.hue,
-      brightness: this.brightness
+      brightness: this.brightness,
+      scale: this.scale
     })
   }
 

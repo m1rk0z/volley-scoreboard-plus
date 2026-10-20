@@ -1,18 +1,35 @@
-<div id="winner-container" class="w-100 h-100 text-center stars-sky" (window:resize)="onResize($event)">
+<div class="wn" [class.draw]="draw">
+  <!-- fuochi d'artificio dietro le scritte, coriandoli davanti -->
+  <div #fx class="layer fx"></div>
 
-    <div class="stars small"></div>
-    <div class="stars medium"></div>
-    <div class="stars large"></div>
+  <div class="in">
+    <div class="tag"><i class="fa fa-trophy"></i> {{ draw ? 'FINE PARTITA' : 'VINCITORE' }}</div>
 
-    <div *ngIf="!loading && winnerSets != loserSets" id="winner-inner" class="winner-text">
-      <p class="winner-team">{{ winnerTeam }}</p>
-      <p class="winner-win"><span>V</span>ince</p>
-      <p class="winner-score">{{ winnerSets }} - {{ loserSets }}</p>
+    <ng-container *ngIf="!draw">
+      <div class="nm win"><span class="fit">{{ winnerTeam }}</span></div>
+      <div class="bar"></div>
+      <div class="score">
+        <span class="w">{{ winnerSets }}</span><span class="sep">–</span><span class="l">{{ loserSets }}</span>
+      </div>
+      <div class="vs">contro <b>{{ loserTeam }}</b></div>
+    </ng-container>
+
+    <ng-container *ngIf="draw">
+      <div class="nm half win"><span class="fit">{{ winnerTeam }}</span></div>
+      <div class="score">
+        <span class="w">{{ winnerSets }}</span><span class="sep">–</span><span class="l">{{ loserSets }}</span>
+      </div>
+      <div class="nm half lose"><span class="fit">{{ loserTeam }}</span></div>
+    </ng-container>
+
+    <div class="partials" *ngIf="partials.length > 0">
+      <div class="set" *ngFor="let s of partials; let i = index" [style.border-top-color]="s.color"
+        [style.animation-delay]="(1.1 + i * 0.12) + 's'">
+        <span class="lbl">{{ s.label }}</span>
+        <span class="pts"><b [class.lo]="s.w < s.l">{{ s.w }}</b><i>–</i><b [class.lo]="s.l < s.w">{{ s.l }}</b></span>
+      </div>
     </div>
-    <div *ngIf="!loading && winnerSets == loserSets" id="winner-inner" class="winner-text" style="top: 15%;">
-      <p class="winner-team">{{ winnerTeam }}</p>
-      <p class="winner-win"><span>vs</span></p>
-      <p class="winner-team">{{ loserTeam }}</p>
-      <p class="winner-score">{{ winnerSets }} - {{ loserSets }}</p>
-    </div>
+  </div>
+
+  <div #cf class="layer cf"></div>
 </div>

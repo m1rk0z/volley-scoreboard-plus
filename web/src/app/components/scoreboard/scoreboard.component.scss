@@ -356,6 +356,11 @@
   @return unquote("calc(var(--u, 1vh) * #{$n})");
 }
 
+// Leggibili a 20-30 m: due cifre larghe ~0.97em devono stare nella colonna squadra,
+// quindi il punteggio è limitato dalla larghezza (cifre alte ~56% dello schermo).
+$score-size: 77;
+$sets-size: 28;
+
 :host {
   display: block;
   width: 100%;
@@ -381,33 +386,38 @@
     height: u(100);
     transform: translate(-50%, -50%);
     display: grid;
-    grid-template-rows: 12% 1fr 18%;
-    padding: u(3) u(5.3);
-    grid-gap: u(2.5);
+    grid-template-rows: u(8) 1fr u(11);
+    padding: u(1.3) u(1.1);
+    grid-gap: u(1.2);
   }
 
+  .home { --c: var(--hb); --cf: var(--hf); --c-dark: var(--hb-dark); --c-glow: var(--hb-glow); }
+  .away { --c: var(--ab); --cf: var(--af); --c-dark: var(--ab-dark); --c-glow: var(--ab-glow); }
+
+  // Riga alta: logo e "SET n" a sinistra, badge (set/match point) su tutto il resto
   .top {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: auto 1fr;
     grid-template-rows: 100%;
     min-height: 0;
     align-items: center;
-    grid-gap: u(3.5);
-    font-size: u(5.5);
+    grid-gap: u(3);
+    font-size: u(6);
+    line-height: 1.15;
     font-weight: 600;
-    letter-spacing: u(0.3);
+    letter-spacing: u(0.25);
   }
   .club {
     display: flex;
     align-items: center;
     min-width: 0;
-    overflow: hidden;
-    img { height: u(10); max-width: 100%; object-fit: contain; object-position: left center; }
+    height: 100%;
+    img { height: u(7.5); max-width: u(30); margin-right: u(2.4); object-fit: contain; object-position: left center; }
   }
   .chip {
     background: var(--sb);
     color: var(--sf);
-    padding: u(0.4) u(2.8);
+    padding: u(0.3) u(2.4);
     border-radius: 999px;
     font-weight: 800;
     white-space: nowrap;
@@ -416,7 +426,7 @@
   .badge {
     background: var(--ac);
     color: var(--acf);
-    padding: u(0.4) u(2.2);
+    padding: u(0.3) u(2);
     border-radius: u(1);
     font-weight: 800;
     white-space: nowrap;
@@ -428,79 +438,104 @@
   .mid {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    grid-gap: u(4.4);
+    grid-gap: u(1.2);
     min-height: 0;
   }
   .team { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
-  .team.home { --c: var(--hb); --cf: var(--hf); --c-dark: var(--hb-dark); --c-glow: var(--hb-glow); }
-  .team.away { --c: var(--ab); --cf: var(--af); --c-dark: var(--ab-dark); --c-glow: var(--ab-glow); }
   .nm {
     display: flex;
     align-items: center;
+    max-width: 100%;
     font-weight: 700;
-    font-size: u(7.5);
-    line-height: 1.1;
+    font-size: u(10);
+    line-height: 1.05;
     text-transform: uppercase;
     white-space: nowrap;
     min-width: 0;
-    span { overflow: hidden; text-overflow: ellipsis; }
+    span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   }
-  .ball { width: u(5.6); height: u(5.6); flex: none; margin-right: u(1.6); }
+  .ball { width: u(6); height: u(6); flex: none; margin-right: u(1.2); }
   .team:not(.serving) .ball { display: none; }
   .score {
     flex: 1;
+    min-height: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    // l'inchiostro delle cifre sta sotto e (con la spaziatura negativa) a destra del centro: il padding lo ricentra
+    padding: 0 0.06em 0.1em 0;
     color: var(--pf);
     font-weight: 800;
-    font-size: u(44);
+    font-size: u($score-size);
     line-height: 0.8;
     font-variant-numeric: tabular-nums;
-    letter-spacing: u(-0.4);
+    letter-spacing: -0.04em;
   }
+
+  // Set vinti impilati: casa sopra, ospiti sotto, ciascuno col colore della squadra
   .sets {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    padding: 0 u(1.8);
-    .n { font-weight: 800; font-size: u(19); line-height: 0.9; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .l { opacity: 0.6; font-size: u(4.8); font-weight: 600; letter-spacing: u(0.5); margin-top: u(0.6); }
+    // allinea il centro della colonna a quello delle cifre (sotto la riga del nome)
+    padding-top: u(11);
+    .n {
+      font-weight: 800;
+      font-size: u($sets-size);
+      line-height: 0.8;
+      // padding asimmetrico: centra l'inchiostro delle cifre nel riquadro
+      padding: u(1.2) u(1.1) u(3.8);
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      border-radius: u(1.4);
+    }
+    .l {
+      text-align: center;
+      opacity: 0.6;
+      font-size: u(4.8);
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: u(0.5);
+      margin: u(1.4) 0;
+    }
   }
 
   .bot {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    grid-gap: u(3.5);
+    grid-gap: u(2);
+    line-height: 1.1;
+    min-height: 0;
   }
   .tos {
     display: flex;
     align-items: center;
-    &.home { --c: var(--hb); --c-glow: var(--hb-glow); }
-    &.away { --c: var(--ab); --c-glow: var(--ab-glow); justify-content: flex-end; }
+    min-width: 0;
+    &.away { justify-content: flex-end; }
     i {
-      width: u(9);
-      height: u(3.4);
+      flex: none;
+      width: u(11.5);
+      height: u(4.6);
       margin: 0 u(0.7);
       border-radius: 999px;
-      border: u(0.5) solid var(--c);
+      border: u(0.6) solid var(--c);
       opacity: 0.85;
     }
     i.on { background: var(--c); opacity: 1; box-shadow: 0 0 u(2) var(--c-glow); }
-    em { font-style: normal; opacity: 0.6; font-size: u(4.8); font-weight: 600; letter-spacing: u(0.3); margin: 0 u(0.7); }
+    em { font-style: normal; opacity: 0.6; font-size: u(5.8); font-weight: 600; letter-spacing: u(0.3); margin: 0 u(0.7); }
   }
   .partials {
     display: flex;
     span {
       background: var(--sb);
       color: var(--sf);
-      border-radius: u(1);
-      padding: u(0.5) u(1.8);
-      margin: 0 u(0.6);
+      border-radius: u(1.2);
+      padding: u(0.3) u(1.5);
+      margin: 0 u(0.5);
       font-weight: 700;
-      font-size: u(5.5);
+      font-size: u(7.2);
       font-variant-numeric: tabular-nums;
       white-space: nowrap;
     }
@@ -511,48 +546,67 @@
     overflow: hidden;
     display: flex;
     align-items: center;
+    max-width: u(98);
+    min-width: 0;
     background: var(--ac);
     color: var(--acf);
     border-radius: u(1.4);
-    padding: u(0.6) u(2.6);
+    padding: u(0.4) u(2.4);
     font-weight: 800;
-    .w { font-size: u(4.6); letter-spacing: u(0.3); margin-right: u(2.4); white-space: nowrap; }
-    .t { font-size: u(9); line-height: 1; font-variant-numeric: tabular-nums; }
+    .w { font-size: u(5.4); letter-spacing: u(0.3); margin-right: u(2); white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .t { font-size: u(10); line-height: 1; font-variant-numeric: tabular-nums; }
     .bar { position: absolute; left: 0; bottom: 0; height: u(0.8); background: var(--acf); opacity: 0.4; transition: width 1s linear; }
     &.warn { animation: sb-pulse 0.4s ease-in-out infinite alternate; }
   }
 
   // A · Broadcast: pannelli con striscia nel colore squadra
   &.v-broadcast {
-    .team { background: var(--pb); border-radius: u(2); overflow: hidden; border-top: u(1.6) solid var(--c); }
-    .nm { padding: u(1.4) u(3) 0; }
+    .team { background: var(--pb); border-radius: u(1.6); overflow: hidden; border-top: u(1.4) solid var(--c); }
+    .nm { padding: u(0.8) u(2.4) 0; }
     .team.away .nm { justify-content: flex-end; }
+    .sets .n { background: var(--pb); color: var(--pf); border-top: u(1) solid var(--c); }
   }
 
   // B · Blocchi squadra: pannelli pieni nel colore squadra
   &.v-blocks {
-    .team { background: linear-gradient(160deg, var(--c), var(--c-dark)); color: var(--cf); border-radius: u(2); overflow: hidden; }
-    .nm { padding: u(1.4) u(3) 0; opacity: 0.92; }
+    .team { background: linear-gradient(160deg, var(--c), var(--c-dark)); color: var(--cf); border-radius: u(1.6); overflow: hidden; }
+    .nm { padding: u(1.4) u(2.4) 0; opacity: 0.92; }
     .team.away .nm { justify-content: flex-end; }
     .score { color: var(--cf); }
-    .sets { background: var(--pb); border-radius: u(2); padding: 0 u(4.2); }
+    .sets .n { background: linear-gradient(160deg, var(--c), var(--c-dark)); color: var(--cf); }
   }
 
   // C · Arena: niente pannelli, cifre direttamente sullo sfondo
   &.v-arena {
     .team { align-items: center; }
-    .nm { padding-bottom: u(1); border-bottom: u(1) solid var(--c); max-width: 100%; }
-    .score { font-size: u(50); }
-    .sets { border-left: u(0.4) solid var(--line); border-right: u(0.4) solid var(--line); padding: 0 u(5.3); }
+    .nm { padding-bottom: u(0.8); border-bottom: u(0.9) solid var(--c); }
+    .sets {
+      border-left: u(0.4) solid var(--line);
+      border-right: u(0.4) solid var(--line);
+      padding-left: u(1.2);
+      padding-right: u(1.2);
+      .n { padding-left: 0; padding-right: 0; border-radius: 0; }
+      .n.home { border-bottom: u(0.9) solid var(--c); }
+      .n.away { border-top: u(0.9) solid var(--c); }
+    }
   }
 
   // D · Metà campo: sfondo diviso nei colori delle squadre
   &.v-split {
     background: linear-gradient(90deg, var(--hb-tint) 0%, var(--bg) 47%, var(--bg) 53%, var(--ab-tint) 100%);
     .team { align-items: center; }
-    .nm { font-size: u(8.5); }
-    .score { font-size: u(50); text-shadow: 0 u(0.6) u(3) rgba(0, 0, 0, 0.28); }
-    .sets { background: var(--pb); border-radius: u(2); padding: 0 u(4.6); box-shadow: 0 u(1) u(4) rgba(0, 0, 0, 0.3); }
+    .nm { font-size: u(10.5); }
+    .score { text-shadow: 0 u(0.6) u(3) rgba(0, 0, 0, 0.28); }
+    .sets {
+      background: var(--pb);
+      border-radius: u(1.6);
+      margin-top: u(11);
+      padding: 0 u(0.6);
+      box-shadow: 0 u(1) u(4) rgba(0, 0, 0, 0.3);
+      .n { color: var(--pf); border-radius: 0; }
+      .n.home { border-bottom: u(0.9) solid var(--c); }
+      .n.away { border-top: u(0.9) solid var(--c); }
+    }
   }
 }
 

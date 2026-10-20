@@ -132,8 +132,8 @@
     <div class="top">
       <div class="club">
         <img *ngIf="isHeaderVisible()" [src]="getLogoUrl()" onerror="this.style.display='none'">
+        <div class="chip" (tap)="currentSetTap.emit()">{{prefs.setName | uppercase}} {{setNumber()}}</div>
       </div>
-      <div class="chip" (tap)="currentSetTap.emit()">{{prefs.setName | uppercase}} {{setNumber()}}</div>
       <div class="badge-slot">
         <div *ngIf="badge() as b" class="badge" [class.pulse]="b.pulse">{{b.text}}</div>
       </div>
@@ -148,12 +148,11 @@
         <div class="score" (tap)="homePointSwipeUp.emit()" (swipeup)="homePointSwipeUp.emit()" (swipedown)="homePointSwipeDown.emit()">{{status.home.points}}</div>
       </div>
 
+      <!-- Set vinti impilati (casa sopra, ospiti sotto): la colonna stretta lascia la larghezza ai punteggi -->
       <div class="sets" (tap)="currentSetTap.emit()">
-        <div class="n">
-          <span (swipeup)="homeSetSwipeUp.emit()" (swipedown)="homeSetSwipeDown.emit()">{{status.home.sets}}</span>–<span
-                (swipeup)="awaySetSwipeUp.emit()" (swipedown)="awaySetSwipeDown.emit()">{{status.away.sets}}</span>
-        </div>
+        <div class="n home" (swipeup)="homeSetSwipeUp.emit()" (swipedown)="homeSetSwipeDown.emit()">{{status.home.sets}}</div>
         <div class="l">{{prefs.setName | uppercase}}</div>
+        <div class="n away" (swipeup)="awaySetSwipeUp.emit()" (swipedown)="awaySetSwipeDown.emit()">{{status.away.sets}}</div>
       </div>
 
       <div class="team away" [class.serving]="status.ballOwner === TeamBallOwner.Away">

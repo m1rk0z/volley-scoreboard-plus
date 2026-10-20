@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
-	"github.com/mgeri/volley-scoreboard-plus/pkg/api"
 	"github.com/mgeri/volley-scoreboard-plus/store"
 	jsonstore "github.com/mgeri/volley-scoreboard-plus/store/json"
 
@@ -23,6 +23,10 @@ type application struct {
 	logger      echo.Logger
 	statusStore store.ScoreboardStatusStore
 	prefsStore  store.ScoreboardPrefsStore
+
+	// serializes status changes (PUT, swap, automatic close of the set)
+	statusMu sync.Mutex
+	autoSet  autoSet
 }
 
 func noContentEchoErrorHandler(err error, ctx echo.Context) {
@@ -115,6 +119,7 @@ func ListenAndServe() {
 		logger:      e.Logger,
 		statusStore: jsonstore.NewJSONScoreboardStatusStore(storeDir, e.Logger),
 		prefsStore:  jsonstore.NewJSONScoreboardPrefsStore(storeDir, e.Logger),
+		autoSet:     autoSet{delay: autoSetDelay},
 	}
 
 	// server address
@@ -127,32 +132,7 @@ func ListenAndServe() {
 	app.registerHandlersWS(e.Group("/ws/v1"))
 
 	// Swap sides (Inversione Campo) endpoint
-	e.POST("/api/v1/scoreboard/swap", func(c echo.Context) error {
-		// 1. Swap status (points, sets, timeouts, ball owner)
-		var status api.ScoreboardStatus
-		if err := app.statusStore.Get(&status); err == nil {
-			status.Home, status.Away = status.Away, status.Home
-			if status.BallOwner == "home" {
-				status.BallOwner = "away"
-			} else if status.BallOwner == "away" {
-				status.BallOwner = "home"
-			}
-			_ = app.statusStore.Update(&status)
-			app.BroadcastStatusUpdate()
-		}
-
-		// 2. Swap prefs (team names, colors)
-		var prefs api.ScoreboardPrefs
-		if err := app.prefsStore.Get(&prefs); err == nil {
-			prefs.HomeName, prefs.AwayName = prefs.AwayName, prefs.HomeName
-			prefs.HomeBg, prefs.AwayBg = prefs.AwayBg, prefs.HomeBg
-			prefs.HomeFg, prefs.AwayFg = prefs.AwayFg, prefs.HomeFg
-			_ = app.prefsStore.Update(&prefs)
-			app.BroadcastPrefsUpdate()
-		}
-
-		return c.NoContent(http.StatusOK)
-	})
+	e.POST("/api/v1/scoreboard/swap", app.ScoreboardSwapPost)
 
 	// SPA support: serve index.html directly for frontend routes (no hash needed)
 	webDir := viper.GetString("server.webAppDir")

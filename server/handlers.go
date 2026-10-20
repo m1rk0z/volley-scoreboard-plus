@@ -99,7 +99,15 @@ func (app *application) ScoreboardStatusPut(ctx echo.Context) error {
 			Message: err.Error()}})
 	}
 
-	if err := app.statusStore.Update(status); err != nil {
+	app.statusMu.Lock()
+	err := app.statusStore.Update(status)
+	if err == nil {
+		// set won: close it automatically after a while
+		app.scheduleAutoSet(status)
+	}
+	app.statusMu.Unlock()
+
+	if err != nil {
 		ctx.Logger().Warnf("Error Updating ScoreboardStatus: %v", err)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardStatusErrorCode, Subcode: 1,
 			Message: err.Error()}})
@@ -109,6 +117,43 @@ func (app *application) ScoreboardStatusPut(ctx echo.Context) error {
 	app.BroadcastStatusUpdate()
 
 	return ctx.JSON(http.StatusOK, status)
+}
+
+// Swap sides (Inversione Campo): teams status, names and colors.// (POST /scoreboard/swap)
+func (app *application) ScoreboardSwapPost(ctx echo.Context) error {
+	// 1. Swap status (points, sets, timeouts, ball owner)
+	var status api.ScoreboardStatus
+	app.statusMu.Lock()
+	err := app.statusStore.Get(&status)
+	if err == nil {
+		status.Home, status.Away = status.Away, status.Home
+		if status.BallOwner == "home" {
+			status.BallOwner = "away"
+		} else if status.BallOwner == "away" {
+			status.BallOwner = "home"
+		}
+		if app.statusStore.Update(&status) == nil {
+			// a pending close of the set is re-armed on the swapped teams
+			app.scheduleAutoSet(&status)
+		}
+	}
+	app.statusMu.Unlock()
+
+	if err == nil {
+		app.BroadcastStatusUpdate()
+	}
+
+	// 2. Swap prefs (team names, colors)
+	var prefs api.ScoreboardPrefs
+	if err := app.prefsStore.Get(&prefs); err == nil {
+		prefs.HomeName, prefs.AwayName = prefs.AwayName, prefs.HomeName
+		prefs.HomeBg, prefs.AwayBg = prefs.AwayBg, prefs.HomeBg
+		prefs.HomeFg, prefs.AwayFg = prefs.AwayFg, prefs.HomeFg
+		_ = app.prefsStore.Update(&prefs)
+		app.BroadcastPrefsUpdate()
+	}
+
+	return ctx.NoContent(http.StatusOK)
 }
 
 // Return the scoreboard Prefs (colors, team names).// (GET /scoreboard/prefs)

@@ -8,6 +8,10 @@ type Options = {
   explosionMaxHeight?: number
   explosionChance?: number
   rocketSpawnInterval?: number
+  scale?: number
+  hues?: number[]
+  hueChance?: number
+  brightness?: number[]
 }
 
 export default class Fireworks {
@@ -32,7 +36,11 @@ export default class Fireworks {
     numParticles = 100,
     explosionMinHeight = 0.2,
     explosionMaxHeight = 0.9,
-    explosionChance = 0.08
+    explosionChance = 0.08,
+    scale = 1,
+    hues = [],
+    hueChance = 0,
+    brightness = [50, 60]
   }: Options = {}) {
 
     this.rocketSpawnInterval = rocketSpawnInterval
@@ -46,6 +54,7 @@ export default class Fireworks {
     this.canvas = document.createElement('canvas')
     this.canvas.width = this.cw
     this.canvas.height = this.ch
+    this.canvas.style.display = 'block'
     this.ctx = this.canvas.getContext('2d')
     container.appendChild(this.canvas)
 
@@ -53,15 +62,24 @@ export default class Fireworks {
       maxRockets: this.maxRockets,
       numParticles,
       cw: this.cw,
-      ch: this.ch
+      ch: this.ch,
+      scale,
+      hues,
+      hueChance,
+      brightness
     })
 
   }
 
   destroy () {
-    this.canvas.parentElement.removeChild(this.canvas)
+    if (this.canvas.parentElement) {
+      this.canvas.parentElement.removeChild(this.canvas)
+    }
     window.clearInterval(this.interval)
     window.cancelAnimationFrame(this.rafInterval)
+    this.interval = null
+    this.rafInterval = null
+    this.things.clear()
   }
 
   start (): () => void {
