@@ -1,6 +1,7 @@
 import os
 import sys
 import base64
+import json
 from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -8,6 +9,13 @@ sys.stdout.reconfigure(encoding='utf-8')
 OUTPUT_WORKSPACE = r"c:\Users\mcominardi\Desktop\Progetti\Rasberry-pi 5\Guida-Volley-Scoreboard.pdf"
 OUTPUT_DESKTOP = r"c:\Users\mcominardi\Desktop\Guida-Volley-Scoreboard.pdf"
 QR_PATH = r"c:\Users\mcominardi\Desktop\Progetti\Rasberry-pi 5\scripts\wifi_qr.png"
+
+# Valori di rete e password: file locale fuori dal repository (vedi README)
+SECRETS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "totem_secrets.json")
+if not os.path.exists(SECRETS_PATH):
+    sys.exit("Manca " + os.path.abspath(SECRETS_PATH) + " (wifi_ssid, wifi_password, gateway, backup_ssid, backup_password, pi_ip, camera_rtsp)")
+with open(SECRETS_PATH, encoding="utf-8") as f:
+    S = json.load(f)
 
 # Read QR Code in base64
 qr_b64 = ""
@@ -275,14 +283,14 @@ html_content = f"""<!DOCTYPE html>
           <tbody>
             <tr>
               <td><strong>FRITZ!Box (Ufficiale)</strong></td>
-              <td><strong style="color:#0055b8; font-size:10.5pt;">Segnapunti</strong></td>
-              <td><code style="font-size:10pt; font-weight:bold;">***RIMOSSO***</code></td>
-              <td>2.4 / 5 GHz • Gateway: <code>x.x.x.x</code></td>
+              <td><strong style="color:#0055b8; font-size:10.5pt;">{S["wifi_ssid"]}</strong></td>
+              <td><code style="font-size:10pt; font-weight:bold;">{S["wifi_password"]}</code></td>
+              <td>2.4 / 5 GHz • Gateway: <code>{S["gateway"]}</code></td>
             </tr>
             <tr>
               <td><strong>Modem 4G (Riserva)</strong></td>
-              <td><strong style="color:#0055b8;">***RIMOSSO***</strong></td>
-              <td><code>***RIMOSSO***</code></td>
+              <td><strong style="color:#0055b8;">{S["backup_ssid"]}</strong></td>
+              <td><code>{S["backup_password"]}</code></td>
               <td>Access Point portatile di backup</td>
             </tr>
           </tbody>
@@ -307,19 +315,19 @@ html_content = f"""<!DOCTYPE html>
       <tbody>
         <tr>
           <td><strong>Pannello Controllo</strong></td>
-          <td><code>http://segnapunti.local/admin</code> (o <code>x.x.x.x/admin</code>)</td>
+          <td><code>http://segnapunti.local/admin</code> (o <code>{S["pi_ip"]}/admin</code>)</td>
           <td><strong>Auto-Login</strong> (admin/admin)</td>
           <td>Punti, set, timeout, cambi campo e temi.</td>
         </tr>
         <tr>
           <td><strong>Schermo Tabellone</strong></td>
-          <td><code>http://segnapunti.local</code> (o <code>x.x.x.x</code>)</td>
+          <td><code>http://segnapunti.local</code> (o <code>{S["pi_ip"]}</code>)</td>
           <td>Nessuna</td>
           <td>Solo visualizzazione (proiettata su TV).</td>
         </tr>
         <tr>
           <td><strong>Video Delay Replay</strong></td>
-          <td><code>http://x.x.x.x:4000</code></td>
+          <td><code>http://{S["pi_ip"]}:4000</code></td>
           <td>Nessuna</td>
           <td>Replay stream telecamera campo.</td>
         </tr>
@@ -439,8 +447,8 @@ html_content = f"""<!DOCTYPE html>
     <h2>5. Video Delay Replay (RTSP Telecamera Campo)</h2>
     <p>Il sistema acquisisce in continuo il flusso della telecamera panoramica posizionata in palestra:</p>
     <ul>
-      <li><strong>Sorgente Telecamera:</strong> <code>rtsp://x.x.x.x:8554/live</code></li>
-      <li><strong>Accesso Replay su Monitor / Tablet:</strong> Aprire nel browser <code>http://x.x.x.x:4000</code></li>
+      <li><strong>Sorgente Telecamera:</strong> <code>{S["camera_rtsp"]}</code></li>
+      <li><strong>Accesso Replay su Monitor / Tablet:</strong> Aprire nel browser <code>http://{S["pi_ip"]}:4000</code></li>
       <li><strong>Regolazione Ritardo:</strong> Dalla barra a scorrimento è possibile impostare un buffer di ritardo fisso (es. <strong>6-8 secondi</strong>) per consentire all'allenatore o all'arbitro di rivedere immediatamente ogni azione dopo la caduta della palla.</li>
     </ul>
   </div>

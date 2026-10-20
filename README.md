@@ -29,26 +29,26 @@ Inoltre, integra un sistema di **Video Delay Replay** via RTSP su monitor dedica
                           │   scoreboard-plus (Backend Go - Porta 80)              │
                           │                                                        │
  Telecamera Campo ────────┼──► hub.service (Flask + FFmpeg - Porta 4000)           │
-(RTSP x.x.x.x)      │    ↳ Stream Video Delay Replay su monitor palestra     │
+(RTSP)                    │    ↳ Stream Video Delay Replay su monitor palestra     │
                           └────────────────────────────────────────────────────────┘
 ```
 
-### Parametri di Rete Predefiniti
-- **IP Raspberry Pi 5:** `x.x.x.x` (o hostname `http://segnapunti.local`)
+### Parametri di Rete
+- **Hostname Raspberry Pi 5:** `http://segnapunti.local`
 - **Porta Scoreboard Principale:** `:80` (HTTP)
 - **Porta Video Delay Hub:** `:4000` (HTTP / RTSP)
-- **Credenziali SSH Sistema:** `m1rk0z` / `***RIMOSSO***`
-- **Utente Display Locale (TV):** `mirko` (Gnome Kiosk Wayland)
-- **Stream Camera RTSP:** `rtsp://x.x.x.x:8554/live`
+- **Utente Display Locale (TV):** Gnome Kiosk Wayland
 
-### 📶 Reti Wi-Fi del Palazzetto (FRITZ!Box 7530 & Riserva)
-Per connettere gli smartphone, i tablet o i computer al sistema segnapunti e al pannello admin:
+IP, credenziali SSH, password Wi-Fi e URL della telecamera **non sono nel repository**: sono in un file locale
+`totem_secrets.json`, nella cartella che contiene il repository, letto da `scripts/generate_printable_pdf.py`:
 
-| Rete | Nome Wi-Fi (SSID) | Password (Chiave) | Standard / Frequenze | Gateway / Router | IP Raspberry Pi 5 |
-|---|---|---|---|---|---|
-| **FRITZ!Box 7530 (Ufficiale)** | **`Segnapunti`** | **`***RIMOSSO***`** | WPA+WPA2 (2.4 & 5 GHz) | `x.x.x.x` (*fritz.box*) | `x.x.x.x` |
-| **Modem 4G (Riserva)** | `***RIMOSSO***` | `***RIMOSSO***` | WPA2 | DHCP Automatico | DHCP |
-
+```json
+{
+  "wifi_ssid": "...", "wifi_password": "...", "gateway": "...",
+  "backup_ssid": "...", "backup_password": "...",
+  "pi_ip": "...", "camera_rtsp": "rtsp://..."
+}
+```
 
 ---
 
@@ -141,7 +141,7 @@ server:
   user: "admin"
   username: "admin"
   password: "admin"
-  jwtSigningKey: "***RIMOSSO***"
+  jwtSigningKey: "<chiave-segreta-lunga-e-casuale>"
   webAppDir: "/opt/scoreboard-plus/web"
   storeDir: "/opt/scoreboard-plus/data"
   logoFile: "/opt/scoreboard-plus/data/logo.svg"
